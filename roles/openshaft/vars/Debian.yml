@@ -1,0 +1,98 @@
+apache_dir: /etc/apache2/sites-enabled
+wsgi_file: wsgi-keystone.conf.debian
+openstack_packages:
+ - 'python-openstackclient'
+ - 'python-glanceclient'
+ - 'python-cinderclient'
+ - 'python-openstackclient'
+ - 'python-neutronclient'
+ - 'python-novaclient'
+ - 'python-heatclient'
+ - 'python-ceilometerclient'
+ - 'python-swiftclient'
+ - 'python-keystoneclient'
+keystone_packages:
+ - 'keystone'
+ - 'apache2'
+ - 'libapache2-mod-wsgi'
+ - 'memcached'
+ - 'python-memcache'
+glance_packages:
+ - 'glance'
+cinder_packages:
+ - 'cinder-api'
+ - 'cinder-scheduler'
+ - 'cinder-volume'
+neutron_packages:
+ - 'neutron-server'
+ - 'neutron-plugin-ml2'
+ - 'neutron-plugin-openvswitch-agent'
+ - 'neutron-l3-agent'
+ - 'neutron-dhcp-agent'
+ - 'neutron-metadata-agent'
+nova_packages:
+ - 'nova-api'
+ - 'nova-cert'
+ - 'nova-conductor'
+ - 'nova-consoleauth'
+ - 'nova-novncproxy'
+ - 'nova-scheduler'
+nova_compute_packages:
+ - 'nova-compute'
+ - 'sysfsutils'
+ - 'neutron-plugin-ml2'
+ - 'neutron-plugin-openvswitch-agent'
+nova_compute_ceilometer_packages:
+ - 'ceilometer-agent-compute'
+heat_packages:
+ - 'heat-api'
+ - 'heat-api-cfn'
+ - 'heat-api-cloudwatch'
+ - 'heat-engine'
+ceilometer_packages:
+ - 'ceilometer-api'
+ - 'ceilometer-collector'
+ - 'ceilometer-agent-central'
+ - 'ceilometer-agent-notification'
+swift_packages:
+ - 'swift'
+ - 'swift-proxy'
+ - 'python-keystonemiddleware'
+ - 'memcached'
+swift_storage_packages:
+ - 'rsync'
+ - 'xinetd'
+ - 'swift' 
+ - 'swift-account'
+ - 'swift-container'
+ - 'swift-object'
+swift_storage_services:
+ - 'xinetd'
+ - 'swift-object'
+ - 'swift-container'
+ - 'swift-account'
+horizon_packages:
+ - 'apache2'
+ - 'libapache2-mod-wsgi'
+ - 'memcached'
+ - 'python-memcache'
+ - 'openstack-dashboard'
+aodh_packages:
+ - 'aodh-api'
+ - 'aodh-evaluator'
+ - 'aodh-notifier'
+ - 'aodh-listener'
+ - 'aodh-expirer'
+ - 'python-aodhclient'
+redis_packages:
+ - 'redis-server'
+designate_packages:
+ - 'designate'
+ - 'designate-central'
+ - 'designate-sink'
+ - 'designate-pool-manager'
+ - 'designate-mdns'
+magnum_packages:
+ - 'magnum-api'
+ - 'magnum-conductor'
+ - 'python-magnumclient.noarch'

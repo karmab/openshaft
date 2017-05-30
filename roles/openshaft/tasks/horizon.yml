@@ -1,0 +1,36 @@
+---
+
+- name: Install Common Openstack Packages
+  package:
+    name: '{{ item }}'
+    state: latest
+  with_items: "{{ openstack_packages }}"
+
+- name: Install Horizon Packages
+  package: 
+    name: '{{ item }}'
+    state: latest
+  with_items: "{{ horizon_packages }}"
+
+- name: Configure Horizon
+  template:
+#    src: "local_settings.{{ version }}"
+    src: "local_settings"
+    dest: "/etc/openstack-dashboard/local_settings"
+    backup: yes
+  notify:
+    - Restart Apache
+
+- name: Configure Horizon Selinux
+  seboolean:
+   name: httpd_can_network_connect
+   state: yes
+   persistent: yes
+  when: ansible_os_family == 'RedHat'
+
+- name: Enable Apache Service
+  service:
+   name: "{{ apache_service }}"
+   enabled: yes
+   state: started
+  when: ansible_connection != 'docker'

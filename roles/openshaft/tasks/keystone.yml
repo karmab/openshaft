@@ -1,0 +1,38 @@
+---
+
+- name: Set Keystone Component
+  set_fact:
+      component: "keystone"
+
+- name: Set Keystone Prefix
+  set_fact:
+      rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+      packages: "{{ keystone_packages }}"
+
+- name: Configure Keystone
+  template:
+    src: "keystone/keystone.conf.{{ common.version }}"
+    dest: "{{ rootdir }}/keystone.conf"
+
+- name: Create Keystone Apache File
+  copy:
+    src: "keystone/{{ wsgi_file }}"
+    dest: "{{ rootdir }}/wsgi-keystone.conf"
+
+- name: Create Keystone Ssl Directory
+  copy:
+    src: "keystone/ssl"
+    dest: "{{ rootdir }}/ssl"
+
+- name: Create Keystone Startfile
+  template:
+    src: "keystone/start.sh.j2"
+    dest: "{{ rootdir }}/start.sh"
+
+- name: Create Keystone Dockerfile
+  template:
+    src: "keystone/Dockerfile.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+
+- name: Build Keystone image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 

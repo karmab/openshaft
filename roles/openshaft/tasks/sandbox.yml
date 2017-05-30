@@ -1,0 +1,26 @@
+---
+
+- name: Create Base Sandbox
+  file:
+    path: "{{ openshaft.rootdir }}"
+    state: directory
+    mode: 0755
+
+- name: Create Components Sandboxes
+  file:
+    path: "{{ openshaft.rootdir }}/{{ item }}"
+    state: directory
+    mode: 0755
+  with_items: "{{ components }}"
+
+- name: Create Common Keystone Client File
+  template:
+    src: keystonerc_admin.j2
+    dest: "{{ openshaft.rootdir }}/{{ item }}/keystonerc_admin"
+  with_items: "{{ components }}"
+
+- name: Create Common Keystone V3 Client File
+  template:
+    src: keystonerc_admin_v3.j2
+    dest: "{{ openshaft.rootdir }}/{{ item }}/keystonerc_admin_v3"
+  with_items: "{{ components }}"

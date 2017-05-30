@@ -1,0 +1,83 @@
+- include: variables.yml
+  tags:
+   - sandbox
+   - ceilometer
+   - cinder
+   - compute
+   - glance
+   - heat
+   - horizon
+   - keystone
+   - neutron
+   - nova
+   - swift
+
+- include: sandbox.yml
+  tags:
+   - sandbox
+   - ceilometer
+   - cinder
+   - compute
+   - glance
+   - heat
+   - horizon
+   - keystone
+   - neutron
+   - nova
+   - swift
+
+- include: keystone.yml
+  tags:
+   - keystone
+
+- include: glance.yml
+  tags:
+   - glance
+
+- include: cinder.yml
+  tags:
+   - cinder
+
+- include: cinder-volume.yml
+  tags:
+   - cinder-volume
+
+- include: neutron.yml
+  tags:
+   - neutron
+
+- include: neutron-dhcp.yml
+  tags:
+   - neutron-dhcp
+
+- include: neutron-l3.yml
+  tags:
+   - neutron-l3
+
+- include: nova.yml
+  tags:
+   - nova
+
+- include: nova-compute.yml
+  tags:
+   - nova-compute
+
+- include: heat.yml
+  tags:
+   - heat
+
+- include: ceilometer.yml
+  tags:
+   - ceilometer
+
+- include: horizon.yml
+  tags:
+   - horizon
+
+- include: swift.yml
+  tags:
+   - swift
+
+- include: swift-storage.yml
+  tags:
+   - swift-storage

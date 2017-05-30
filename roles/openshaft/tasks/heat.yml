@@ -1,0 +1,85 @@
+---
+
+- name: Install Common Openstack Packages
+  package:
+    name: '{{ item }}'
+    state: latest
+  with_items: "{{ openstack_packages }}"
+
+- name: Install Heat Packages
+  package: 
+    name: '{{ item }}'
+    state: latest
+  with_items: "{{ heat_packages }}"
+
+- name: Install PyMysql Package
+  package: 
+    name: 'python-PyMySQL'
+    state: latest
+  when: version != 'kilo' and ansible_os_family == 'RedHat'
+
+- name: Configure Heat
+  template:
+    src: "heat.conf.{{ version }}"
+    dest: "/etc/heat/heat.conf"
+    backup: yes
+  notify:
+   - Restart Heat
+
+- name: Populate Heat Database
+  run_once: yes
+  shell: heat-manage db_sync
+#  when: heat_db_version.stdout == "0"
+
+- name: Create Heat User
+  keystone_user:
+    state: present
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone.admin_token }}"
+    user: heat
+    tenant: services
+    password: "{{ heat.password }}"
+
+- name: Grant Heat Admin Role
+  keystone_user:
+    endpoint: "{{ keystone_admin_url }}"
+    token: "{{ keystone.admin_token }}"
+    tenant: services
+    user: heat
+    role: admin
+
+- name: Create Heat Service And Endpoint
+  keystone_service: 
+    name: heat
+    type: orchestration
+    description: "Heat Identity Service"
+    publicurl: "{{ heat_public_url }}"
+    internalurl: "{{ heat_internal_url }}"
+    adminurl: "{{ heat_admin_url }}"
+    endpoint: "{{ keystone_internal_url }}"
+    login_user: admin
+    login_password: "{{ keystone.admin_password }}"
+    tenant_name: admin
+    region: "{{ common.region }}"
+
+- name: Create Heat CloudFormation Service And Endpoint
+  keystone_service: 
+    name: heat-cfn
+    type: cloudformation
+    description: "Heat CloudFormation Service"
+    publicurl: "{{ heat_cfn_public_url }}"
+    internalurl: "{{ heat_cfn_internal_url }}"
+    adminurl: "{{ heat_cfn_admin_url }}"
+    endpoint: "{{ keystone_internal_url }}"
+    login_user: admin
+    login_password: "{{ keystone.admin_password }}"
+    tenant_name: admin
+    region: "{{ common.region }}"
+
+- name: Enable Heat Services
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_items: "{{ heat_services }}"
+  when: ansible_connection != 'docker'

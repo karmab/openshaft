@@ -1,0 +1,16 @@
+FROM {{ openshaft.image }}
+MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
+
+RUN yum -y install centos-release-openstack-newton && yum -y install python-openstackclient mariadb {{ packages  | join (' ') }} && yum clean all
+
+ADD     keystonerc_admin /root
+ADD     keystonerc_admin_v3 /root
+ADD     keystone.conf /etc/keystone
+ADD     ssl /etc/keystone
+ADD     wsgi-keystone.conf {{ apache_dir }}
+ADD     start.sh /usr/bin
+
+RUN     chown root:root /usr/bin/start.sh && chmod u+x /usr/bin/start.sh
+
+ENTRYPOINT  ["/usr/bin/start.sh"]
+EXPOSE      5000 35357
