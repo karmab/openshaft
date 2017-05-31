@@ -14,6 +14,7 @@ components:
  - 'swift'
  - 'swift-storage'
 apache_dir: /etc/httpd/conf.d
+apache_service: httpd
 wsgi_file: wsgi-keystone.conf.redhat
 openstack_packages:
  - 'openstack-utils'
@@ -31,6 +32,7 @@ openstack_packages:
  - 'python-novaclient'
  - 'python-neutronclient'
 keystone_packages:
+ - 'python-openstackclient'
  - 'openstack-keystone'
  - 'python-keystonemiddleware'
  - 'httpd'
@@ -38,14 +40,17 @@ keystone_packages:
  - 'memcached'
  - 'python-memcached'
 glance_packages:
+ - 'python-openstackclient'
  - 'openstack-glance'
  - 'python-osprofiler'
 cinder_packages:
+ - 'python-openstackclient'
  - 'openstack-cinder'
  - 'device-mapper-multipath'
  - 'python-osprofiler'
  - 'python-oslo-middleware'
 neutron_packages:
+ - 'python-openstackclient'
  - 'openvswitch'
  - 'openstack-neutron'
  - 'openstack-neutron-ml2'
@@ -53,6 +58,7 @@ neutron_packages:
  - 'python-pecan'
  - 'python-kombu'
 nova_packages:
+ - 'python-openstackclient'
  - 'openstack-nova-api'
  - 'openstack-nova-conductor'
  - 'openstack-nova-scheduler'
@@ -60,14 +66,17 @@ nova_packages:
  - 'openstack-nova-console'
  - 'python-kombu'
 nova_compute_packages:
+ - 'python-openstackclient'
  - 'libvirt-daemon'
  - 'openstack-nova-compute'
  - 'openstack-selinux'
  - 'python-novaclient'
  - 'python-neutronclient'
 nova_compute_ceilometer_packages:
+ - 'python-openstackclient'
  - 'openstack-ceilometer-compute'
 heat_packages:
+ - 'python-openstackclient'
  - 'openstack-heat-api'
  - 'openstack-heat-api-cfn'
  - 'openstack-heat-common'
@@ -78,6 +87,7 @@ heat_packages:
  - 'python-osprofiler'
  - 'python-oslo-middleware'
 ceilometer_packages:
+ - 'python-openstackclient'
  - 'python-oslo-config'
  - 'openstack-ceilometer-api'
  - 'openstack-ceilometer-central'
@@ -88,16 +98,19 @@ ceilometer_packages:
  - 'openstack-ceilometer-notification'
  - 'python-oslo-middleware'
 swift_packages:
+ - 'python-openstackclient'
  - 'openstack-swift-proxy'
  - 'openstack-swift-plugin-swift3'
  - 'memcached'
 swift_storage_packages:
+ - 'python-openstackclient'
  - 'rsync'
  - 'xinetd'
  - 'openstack-swift-object'
  - 'openstack-swift-container'
  - 'openstack-swift-account'
 horizon_packages:
+ - 'python-openstackclient'
  - 'httpd'
  - 'mod_wsgi'
  - 'mod_ssl'
@@ -107,15 +120,15 @@ horizon_packages:
  - 'python-django-openstack-auth'
  - 'python-XStatic-smart-table.noarch'
 aodh_packages:
+ - 'python-openstackclient'
  - 'openstack-aodh-api'
  - 'openstack-aodh-evaluator'
  - 'openstack-aodh-notifier'
  - 'openstack-aodh-listener'
  - 'openstack-aodh-expirer'
  - 'python-aodhclient'
-redis_packages:
- - 'redis'
 designate_packages:
+ - 'python-openstackclient'
  - 'openstack-designate-api'
  - 'openstack-designate-central'
  - 'openstack-designate-sink'
@@ -126,6 +139,7 @@ designate_packages:
  - 'python-designateclient'
  - 'openstack-designate-agent'
 magnum_packages:
+ - 'python-openstackclient'
  - 'openstack-magnum-api'
  - 'openstack-magnum-conductor'
  - 'python2-magnumclient.noarch'

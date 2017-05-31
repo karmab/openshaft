@@ -13,6 +13,7 @@
   template:
     src: "keystone/keystone.conf.{{ common.version }}"
     dest: "{{ rootdir }}/keystone.conf"
+  register: configure_keystone
 
 - name: Create Keystone Apache File
   copy:
@@ -36,3 +37,4 @@
 
 - name: Build Keystone image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
+  when: configure_keystone.changed
