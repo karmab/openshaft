@@ -1,31 +1,37 @@
 ---
 
-- name: Install Cinder Volume Packages
-  package: 
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ cinder_packages }}"
+- name: Set Cinder Volume Caomponent
+  set_fact:
+    component: "cinder-volume"
+
+- name: Set Cinder Volume Prefix
+  set_fact:
+    rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+    packages: "{{ cinder_packages }}"
 
 - name: Configure Cinder
   template:
-    src: "cinder.conf.{{ version }}"
-    dest: "/etc/cinder/cinder.conf"
-    backup: yes
-  notify:
-    - Restart Cinder Volume
+    src: "cinder/cinder.conf.{{ version }}"
+    dest: "{{ rootdir }}/cinder.conf"
+  register: configure_cinder
 
 - name: Configure Cinder Volume NFS Shares
   template: 
-    src: nfs_shares_config.j2
-    dest: "{{ cinder.nfs_shares_config }}"
-    owner: cinder
-    group: cinder
+    src: "cinder/nfs_shares_config.j2"
+    dest: "{{ rootdir }}/nfs_shares_config"
   when: cinder.volume_driver == 'cinder.volume.drivers.nfs.NfsDriver' 
-  notify:
-    - Restart Cinder Volume
 
-- name: Enable Cinder Volume Service
-  service:
-    name: "{{ cinder_volume_service }}"
-    enabled: yes
-    state: started
+- name: Create Cinder Volume Startfile
+  template:
+   src: "cinder/start_volume.sh.j2"
+   dest: "{{ rootdir }}/start.sh"
+
+- name: Create Cinder Volume Dockerfile
+  template:
+    src: "cinder/Dockerfile_volume.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+  register: create_dockerfile
+
+- name: Build Cinder image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}"
+  when: configure_cinder.changed or create_dockerfile.changed

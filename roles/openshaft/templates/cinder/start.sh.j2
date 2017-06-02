@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+
+# bootstrap
+mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "use {{ component }} ;"
+if [ "$?" != "0" ] ; then
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}.* TO '{{ vars[component]['dbuser'] }}'@'%' identified by '{{ vars[component]['dbpassword'] }}' ;"
+  cinder-manage db sync
+  source /root/keystonerc_admin
+  openstack project create --description "Service Project" services
+  openstack service create  --name cinder --description "Cinder Volume Service" volume
+  openstack service create  --name cinderv2 --description "CinderV2 Volume Service" volumev2
+  openstack endpoint create --region {{ common.region }} --publicurl '{{ cinder_public_url }}' --internalurl '{{ cinder_internal_url }}' --adminurl '{{ cinder_admin_url }}' volume
+  openstack endpoint create --region {{ common.region }} --publicurl '{{ cinderv2_public_url }}' --internalurl '{{ cinderv2_internal_url }}' --adminurl '{{ cinderv2_admin_url }}' volumev2
+  openstack user create --password {{ cinder.password }} cinder
+  openstack role add --project services --user cinder admin
+fi
+
+# run command
+cinder-scheduler --config-file=/etc/cinder/cinder.conf &
+cinder-api --config-file=/etc/cinder/cinder.conf

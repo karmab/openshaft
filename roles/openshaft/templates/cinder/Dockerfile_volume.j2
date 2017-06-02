@@ -1,0 +1,16 @@
+FROM centos:7
+MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
+
+RUN yum -y install centos-release-openstack-newton && yum -y install mariadb {{ packages | join (' ') }} && yum clean all
+
+ADD     keystonerc_admin /root
+ADD     keystonerc_admin_v3 /root
+ADD     cinder.conf /etc/cinder
+{% if cinder.volume_driver == 'cinder.volume.drivers.nfs.NfsDriver' %}
+ADD nfs_shares_config /etc/cinder
+{% endif %}
+ADD     start.sh /usr/bin
+
+RUN     chown root:root /usr/bin/start_volume.sh && chmod u+x /usr/bin/start_volume.sh
+
+ENTRYPOINT  ["/usr/bin/start_volume.sh"]

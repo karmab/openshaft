@@ -45,6 +45,7 @@ glance_packages:
  - 'python-osprofiler'
 cinder_packages:
  - 'python-openstackclient'
+ - 'python-keystonemiddleware'
  - 'openstack-cinder'
  - 'device-mapper-multipath'
  - 'python-osprofiler'

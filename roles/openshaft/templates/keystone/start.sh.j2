@@ -6,9 +6,7 @@ if [ "$?" != "0" ] ; then
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}.* TO '{{ vars[component]['dbuser'] }}'@'%' identified by '{{ vars[component]['dbpassword'] }}' ;"
   su - keystone -s /bin/bash -c 'keystone-manage db_sync'
-  # bootstrap {{ component }}
-  # keystone-manage bootstrap --bootstrap-password {{ keystone.admin_password }} --bootstrap-admin-url http://{{ keystone_host }}:35357/v2.0/ --bootstrap-internal-url http://{{ keystone_host }}:35357/v2.0/ --bootstrap-public-url http://{{ keystone_host }}:5000/v2.0/ --bootstrap-region-id {{ common.region }}
-  keystone-manage bootstrap --bootstrap-password {{ keystone.admin_password }} --bootstrap-admin-url {{ keystone_admin_url }} --bootstrap-internal-url {{ keystone_internal_url }} --bootstrap-public-url {{ keystone_public_url }} --bootstrap-region-id {{ common.region }}
+  keystone-manage bootstrap --bootstrap-password {{ keystone.admin_password }} --bootstrap-admin-url '{{ keystone_admin_url }}' --bootstrap-internal-url '{{ keystone_internal_url }}' --bootstrap-public-url '{{ keystone_public_url }}' --bootstrap-region-id {{ common.region }}
 fi
 
 # run command

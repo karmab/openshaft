@@ -9,7 +9,7 @@ if [ "$?" != "0" ] ; then
   source /root/keystonerc_admin
   openstack project create --description "Service Project" services
   openstack service create  --name glance --description "Openstack Image Service" image
-  openstack endpoint create --region {{ common.region }} --publicurl   {{ glance_public_url }} --internalurl {{ glance_internal_url }} --adminurl {{ glance_admin_url }} image
+  openstack endpoint create --region {{ common.region }} --publicurl '{{ glance_public_url }}' --internalurl '{{ glance_internal_url }}' --adminurl '{{ glance_admin_url }}' image
   openstack user create --password {{ glance.password }} glance
   openstack role add --project services --user glance admin
 fi
