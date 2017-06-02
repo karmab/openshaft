@@ -32,6 +32,6 @@
     dest: "{{ rootdir }}/Dockerfile"
   register: create_dockerfile
 
-- name: Build Cinder image
+- name: Build Cinder Volume Image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}"
   when: configure_cinder.changed or create_dockerfile.changed
