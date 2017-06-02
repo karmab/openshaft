@@ -7,6 +7,7 @@ A set of roles to deploy openstack containers for each component. Plan to run th
 ## INITIALIZATION
 
 to tweak settings, create a *host_vars/localhost* file copying default configuration from *roles/openshat/default/main.yml* 
+you also want to export ANSIBLE_ROLES_PATH so that you can see the openshaft role
 
 ## BUILD ALL COMPONENT IMAGES
 

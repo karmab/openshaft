@@ -3,28 +3,40 @@
    - sandbox
    - ceilometer
    - cinder
+   - cinder-volume
    - compute
    - glance
    - heat
    - horizon
    - keystone
    - neutron
+   - neutron-dhcp
+   - neutron-l3
+   - neutron-ovs
    - nova
+   - nova-compute
    - swift
+   - swift-storage
 
 - include: sandbox.yml
   tags:
    - sandbox
    - ceilometer
    - cinder
+   - cinder-volume
    - compute
    - glance
    - heat
    - horizon
    - keystone
    - neutron
+   - neutron-dhcp
+   - neutron-l3
+   - neutron-ovs
    - nova
+   - nova-compute
    - swift
+   - swift-storage
 
 - include: keystone.yml
   tags:
@@ -53,6 +65,10 @@
 - include: neutron-l3.yml
   tags:
    - neutron-l3
+
+- include: neutron-ovs.yml
+  tags:
+   - neutron-ovs
 
 - include: nova.yml
   tags:
