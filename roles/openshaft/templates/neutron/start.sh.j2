@@ -5,7 +5,7 @@ mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "use {{
 if [ "$?" != "0" ] ; then
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}.* TO '{{ vars[component]['dbuser'] }}'@'%' identified by '{{ vars[component]['dbpassword'] }}' ;"
-  neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini current
+  neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head
   source /root/keystonerc_admin
   openstack project create --description "Service Project" services
   openstack service create  --name neutron --description "Openstack Network Service" network
@@ -18,4 +18,5 @@ fi
 {% if neutron_core_plugin == 'ml2' %}
 ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
 {% endif %}
+ln -s /usr/share/neutron/api-paste.ini /etc/neutron/api-paste.ini
 neutron-server --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini
