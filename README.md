@@ -46,6 +46,15 @@ docker run -d --name glance -p 9191:9191 -p 9292:9292 -v /tmp/openshaft/glance_d
 docker run -d --name cinder -p 8776:8776 openshaft/cinder
 ```
 
+## PRIVILEGED CONTAINERS
+
+If using an nfs cinder backend:
+
+```
+docker run --privileged -d --name cinder-volume openshaft/cinder-volume
+```
+
+
 ## RUN CLIENT CONTAINER
 
 every image is built with bash and a keystonerc_admin you can use for testing
