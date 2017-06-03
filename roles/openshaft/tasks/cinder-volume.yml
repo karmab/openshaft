@@ -17,8 +17,8 @@
 
 - name: Configure Cinder Volume NFS Shares
   template: 
-    src: "cinder/nfs_shares_config.j2"
-    dest: "{{ rootdir }}/nfs_shares_config"
+    src: "cinder/nfs_shares.j2"
+    dest: "{{ rootdir }}/nfs_shares"
   when: cinder.volume_driver == 'cinder.volume.drivers.nfs.NfsDriver' 
 
 - name: Create Cinder Volume Startfile
