@@ -13,8 +13,8 @@
   template:
     src: "Dockerfile_client.j2"
     dest: "{{ rootdir }}/Dockerfile"
-  register: create_dockerfile
+  register: dockerfile
  
 - name: Build Client image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
-  when: create_dockerfile.changed
+  when: dockerfile.changed

@@ -26,13 +26,14 @@
   template:
    src: "neutron/start.sh.j2"
    dest: "{{ rootdir }}/start.sh"
+  register: start_file
 
 - name: Create Neutron Dockerfile
   template:
     src: "neutron/Dockerfile.j2"
     dest: "{{ rootdir }}/Dockerfile"
-  register: create_dockerfile
+  register: dockerfile
  
 - name: Build Neutron image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
-  when: configure_neutron.changed or create_dockerfile.changed
+  when: configure_neutron.changed or start_file.changed or dockerfile.changed

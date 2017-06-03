@@ -29,12 +29,14 @@
   template:
     src: "keystone/start.sh.j2"
     dest: "{{ rootdir }}/start.sh"
+  register: start_file
 
 - name: Create Keystone Dockerfile
   template:
     src: "keystone/Dockerfile.j2"
     dest: "{{ rootdir }}/Dockerfile"
+  register: dockerfile
 
 - name: Build Keystone image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
-  when: configure_keystone.changed
+  when: configure_keystone.changed or start_file.changed or dockerfile.changed

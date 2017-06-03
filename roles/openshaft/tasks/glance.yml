@@ -22,13 +22,14 @@
   template:
    src: "glance/start.sh.j2"
    dest: "{{ rootdir }}/start.sh"
+  register: start_file
 
 - name: Create Glance Dockerfile
   template:
     src: "glance/Dockerfile.j2"
     dest: "{{ rootdir }}/Dockerfile"
-  register: create_dockerfile
+  register: dockerfile
  
 - name: Build Glance image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
-  when: configure_glance.changed or create_dockerfile.changed
+  when: configure_glance.changed or start_file.changed or dockerfile.changed

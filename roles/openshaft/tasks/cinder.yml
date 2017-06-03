@@ -19,13 +19,14 @@
   template:
    src: "cinder/start.sh.j2"
    dest: "{{ rootdir }}/start.sh"
+  register: start_file
 
 - name: Create Cinder Dockerfile
   template:
     src: "cinder/Dockerfile.j2"
     dest: "{{ rootdir }}/Dockerfile"
-  register: create_dockerfile
+  register: dockerfile
  
 - name: Build Cinder Image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
-  when: configure_cinder.changed or create_dockerfile.changed
+  when: configure_cinder.changed or start_file.changed or dockerfile.changed
