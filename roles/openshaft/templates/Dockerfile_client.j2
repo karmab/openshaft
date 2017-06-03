@@ -1,0 +1,9 @@
+FROM centos:7
+MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
+
+RUN yum -y install centos-release-openstack-newton && yum -y install mariadb {{ packages | join (' ') }} && yum clean all
+
+ADD     keystonerc_admin /root
+ADD     keystonerc_admin_v3 /root
+
+ENTRYPOINT  ["/bin/bash"]

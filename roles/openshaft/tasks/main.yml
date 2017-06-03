@@ -1,6 +1,7 @@
 - include: variables.yml
   tags:
    - sandbox
+   - client
    - ceilometer
    - cinder
    - cinder-volume
@@ -21,6 +22,7 @@
 - include: sandbox.yml
   tags:
    - sandbox
+   - client
    - ceilometer
    - cinder
    - cinder-volume
@@ -37,6 +39,10 @@
    - nova-compute
    - swift
    - swift-storage
+
+- include: client.yml
+  tags:
+   - client
 
 - include: keystone.yml
   tags:

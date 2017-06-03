@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+
+# bootstrap
+mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "use {{ component }} ;"
+if [ "$?" != "0" ] ; then
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}.* TO '{{ vars[component]['dbuser'] }}'@'%' identified by '{{ vars[component]['dbpassword'] }}' ;"
+  neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini current
+  source /root/keystonerc_admin
+  openstack project create --description "Service Project" services
+  openstack service create  --name neutron --description "Openstack Network Service" network
+  openstack endpoint create --region {{ common.region }} --publicurl '{{ neutron_public_url }}' --internalurl '{{ neutron_internal_url }}' --adminurl '{{ neutron_admin_url }}' network
+  openstack user create --password {{ neutron.password }} neutron
+  openstack role add --project services --user neutron admin
+fi
+
+# run command
+{% if neutron_core_plugin == 'ml2' %}
+ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
+{% endif %}
+neutron-server --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini

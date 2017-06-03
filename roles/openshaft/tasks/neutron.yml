@@ -1,89 +1,38 @@
 ---
 
-- name: Install Common Openstack Packages
-  package:
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ openstack_packages }}"
+- name: Set Neutron Component
+  set_fact:
+    component: "neutron"
 
-- name: Install Neutron Packages
-  package: 
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ neutron_packages }}"
+- name: Set Neutron Prefix
+  set_fact:
+    rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+    packages: "{{ neutron_packages }}"
 
 - name: Configure Neutron
   template:
-    src: "neutron.conf.{{ version }}"
-    dest: "/etc/neutron/neutron.conf"
-    backup: yes
-  notify:
-    - Restart Neutron
-
-- name: Configure Neutron Ml2 Plugin Link
-  file:
-    state: link
-    dest: "/etc/neutron/plugin.ini"
-    src: "/etc/neutron/plugins/ml2/ml2_conf.ini"
-    force: yes
-  when: neutron_core_plugin == 'ml2'
-  register: plugin_ini
-  notify:
-   - Restart Neutron
+    src: "neutron/neutron.conf.{{ common.version }}"
+    dest: "{{ rootdir }}/neutron.conf"
+  register: configure_neutron
 
 - name: Configure Neutron M2l Plugin File
   template:
-    src: "ml2/ml2_conf.ini"
-    dest: "/etc/neutron/plugins/ml2/ml2_conf.ini"
+    src: "neutron/ml2/ml2_conf.ini"
+    dest: "{{ rootdir }}/ml2_conf.ini"
     backup: yes
   when: neutron_core_plugin == 'ml2'
-  notify:
-    - Restart Neutron
 
-- name: Check Neutron Database Version
-  shell: neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head
-  register: neutron_db_version
-  changed_when: false
+- name: Create Neutron Startfile
+  template:
+   src: "neutron/start.sh.j2"
+   dest: "{{ rootdir }}/start.sh"
 
-- name: Populate Neutron Database
-  run_once: yes
-  shell: neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini current
-  when: "'OK' not in neutron_db_version"
-
-- name: Create Neutron User
-  keystone_user:
-    state: present
-    endpoint: "{{ keystone_admin_url }}"
-    token: "{{ keystone.admin_token }}"
-    user: neutron
-    tenant: services
-    password: "{{ neutron.password }}"
-
-- name: Grant Neutron Admin Role
-  keystone_user:
-    endpoint: "{{ keystone_admin_url }}"
-    token: "{{ keystone.admin_token }}"
-    tenant: services
-    user: neutron
-    role: admin
-
-- name: Create Neutron Service And Endpoint
-  keystone_service: 
-    name: neutron
-    type: network
-    description: "Neutron Networking Service"
-    publicurl: "{{ neutron_public_url }}"
-    internalurl: "{{ neutron_internal_url }}"
-    adminurl: "{{ neutron_admin_url }}"
-    endpoint: "{{ keystone_internal_url }}"
-    login_user: admin
-    login_password: "{{ keystone.admin_password }}"
-    tenant_name: admin
-    region: "{{ common.region }}"
-
-- name: Enable Neutron Service
-  service:
-    name: "{{ neutron_service}}"
-    enabled: yes
-    state: started
-  when: ansible_connection != 'docker'
+- name: Create Neutron Dockerfile
+  template:
+    src: "neutron/Dockerfile.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+  register: create_dockerfile
+ 
+- name: Build Neutron image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
+  when: configure_neutron.changed or create_dockerfile.changed

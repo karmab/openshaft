@@ -44,6 +44,7 @@ also add this */etc/host entry* for local testing
 docker run -d --name keystone -p 5000:5000 -p 35357:35357 openshaft/keystone
 docker run -d --name glance -p 9191:9191 -p 9292:9292 -v /tmp/openshaft/glance_data:/var/lib/glance openshaft/glance
 docker run -d --name cinder -p 8776:8776 openshaft/cinder
+docker run -d --name neutron -p 9696:9696 openshaft/neutron
 ```
 
 ## PRIVILEGED CONTAINERS
@@ -60,7 +61,7 @@ docker run --privileged -d --name cinder-volume openshaft/cinder-volume
 every image is built with bash and a keystonerc_admin you can use for testing
 
 ```
-docker run --name client --entrypoint=/bin/bash -it openshaft/keystone
+docker run --name client -it openshaft/client
 ```
 
 ## TODO LIST

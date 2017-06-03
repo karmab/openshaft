@@ -1,4 +1,5 @@
 components:
+ - 'client'
  - 'keystone'
  - 'glance'
  - 'cinder'

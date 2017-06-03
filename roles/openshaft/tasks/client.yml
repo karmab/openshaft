@@ -1,0 +1,20 @@
+---
+
+- name: Set Client Component
+  set_fact:
+    component: "client"
+
+- name: Set Client Prefix
+  set_fact:
+    rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+    packages: "{{ openstack_packages }}"
+
+- name: Create Client Dockerfile
+  template:
+    src: "Dockerfile_client.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+  register: create_dockerfile
+ 
+- name: Build Client image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
+  when: create_dockerfile.changed
