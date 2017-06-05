@@ -1,4 +1,5 @@
 components:
+ - 'dbupgrader'
  - 'client'
  - 'keystone'
  - 'glance'
@@ -145,3 +146,10 @@ magnum_packages:
  - 'openstack-magnum-api'
  - 'openstack-magnum-conductor'
  - 'python2-magnumclient.noarch'
+dbupgrader_packages:
+ - 'python-openstackclient'
+ - 'opentack-keystone'
+ - 'opentack-glance'
+ - 'opentack-cinder'
+ - 'opentack-neutron'
+ - 'opentack-glance'

@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+# upgrade db
+su - keystone -s /bin/bash -c 'keystone-manage db_sync'
+su - glance -s /bin/bash -c 'glance-manage db_sync'
+cinder-manage db sync
+neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head

@@ -1,6 +1,7 @@
 - include: variables.yml
   tags:
    - sandbox
+   - dbupgrader
    - client
    - ceilometer
    - cinder
@@ -22,6 +23,7 @@
 - include: sandbox.yml
   tags:
    - sandbox
+   - dbupgrader
    - client
    - ceilometer
    - cinder
@@ -43,6 +45,10 @@
 - include: client.yml
   tags:
    - client
+
+- include: dbupgrader.yml
+  tags:
+   - dbupgrader
 
 - include: keystone.yml
   tags:

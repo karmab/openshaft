@@ -30,6 +30,6 @@
     dest: "{{ rootdir }}/Dockerfile"
   register: dockerfile
  
-- name: Build Glance image
+- name: Build Glance Image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
   when: configure_glance.changed or start_file.changed or dockerfile.changed

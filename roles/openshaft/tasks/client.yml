@@ -11,7 +11,7 @@
 
 - name: Create Client Dockerfile
   template:
-    src: "Dockerfile_client.j2"
+    src: "client/Dockerfile_client.j2"
     dest: "{{ rootdir }}/Dockerfile"
   register: dockerfile
  

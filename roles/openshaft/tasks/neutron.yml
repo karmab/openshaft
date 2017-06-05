@@ -19,7 +19,6 @@
   template:
     src: "neutron/ml2/ml2_conf.ini"
     dest: "{{ rootdir }}/ml2_conf.ini"
-    backup: yes
   when: neutron_core_plugin == 'ml2'
 
 - name: Create Neutron Startfile
@@ -34,6 +33,6 @@
     dest: "{{ rootdir }}/Dockerfile"
   register: dockerfile
  
-- name: Build Neutron image
+- name: Build Neutron Image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
   when: configure_neutron.changed or start_file.changed or dockerfile.changed

@@ -1,0 +1,59 @@
+---
+
+- name: Set Dbupgrader Component
+  set_fact:
+    component: "dbupgrader"
+
+- name: Set Dbupgrader Prefix
+  set_fact:
+    rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+    packages: "{{ dbupgrader_packages }}"
+
+- name: Configure Keystone In Dbupgrader
+  template:
+    src: "keystone/keystone.conf.{{ common.version }}"
+    dest: "{{ rootdir }}/keystone.conf"
+  register: configure_keystone
+
+- name: Configure Glance in Dbupgrader
+  template:
+    src: "glance/glance-{{ item }}.conf.{{ common.version }}"
+    dest: "{{ rootdir }}/glance-{{ item }}.conf"
+  with_items:
+   - 'api'
+   - 'registry'
+  register: configure_glance
+
+- name: Configure Cinder in Dbupgrader
+  template:
+    src: "cinder/cinder.conf.{{ common.version }}"
+    dest: "{{ rootdir }}/cinder.conf"
+  register: configure_cinder
+
+- name: Configure Neutron In Dbupgrader
+  template:
+    src: "neutron/neutron.conf.{{ common.version }}"
+    dest: "{{ rootdir }}/neutron.conf"
+  register: configure_neutron
+
+- name: Configure Neutron M2l Plugin File In Dbupgrader
+  template:
+    src: "neutron/ml2/ml2_conf.ini"
+    dest: "{{ rootdir }}/ml2_conf.ini"
+  when: neutron_core_plugin == 'ml2'
+
+- name: Create Dbupgrader Startfile
+  template:
+   src: "dbupgrader/start.sh.j2"
+   dest: "{{ rootdir }}/start.sh"
+  register: start_file
+
+- name: Create Dbupgrader Dockerfile
+  template:
+    src: "dbupgrader/Dockerfile.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+  register: dockerfile
+ 
+- name: Build Dbupgrader Image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
+  when: dockerfile.changed or configure_cinder.changed
