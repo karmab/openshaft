@@ -3,7 +3,7 @@ MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
 
 RUN yum -y install centos-release-openstack-newton && yum -y install {{ packages | join (' ') }} && yum clean all
 
-ADD     keystone /etc/keystone
+ADD     keystone.conf /etc/keystone
 ADD     glance-registry.conf /etc/glance
 ADD     glance-registry.conf /etc/glance
 ADD     cinder.conf /etc/cinder

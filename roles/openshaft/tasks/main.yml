@@ -12,6 +12,7 @@
    - horizon
    - keystone
    - neutron
+   - neutron-agents
    - neutron-dhcp
    - neutron-l3
    - neutron-ovs
@@ -34,6 +35,7 @@
    - horizon
    - keystone
    - neutron
+   - neutron-agents
    - neutron-dhcp
    - neutron-l3
    - neutron-ovs
@@ -70,17 +72,21 @@
   tags:
    - neutron
 
-- include: neutron-dhcp.yml
+- include: neutron-agents.yml
   tags:
-   - neutron-dhcp
+   - neutron-agents
 
-- include: neutron-l3.yml
-  tags:
-   - neutron-l3
-
-- include: neutron-ovs.yml
-  tags:
-   - neutron-ovs
+#- include: neutron-dhcp.yml
+#  tags:
+#   - neutron-dhcp
+#
+#- include: neutron-l3.yml
+#  tags:
+#   - neutron-l3
+#
+#- include: neutron-ovs.yml
+#  tags:
+#   - neutron-ovs
 
 - include: nova.yml
   tags:

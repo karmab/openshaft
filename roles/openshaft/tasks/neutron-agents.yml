@@ -1,0 +1,67 @@
+---
+
+- name: Set Neutron Agents Component
+  set_fact:
+    component: "neutron-agents"
+
+- name: Set Neutron Agents Prefix
+  set_fact:
+    rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+    packages: "{{ neutron_packages }}"
+
+- name: Create Neutron Agents Ovs ifcfg-br-int
+  template:
+    src: "neutron/ifcfg-br-int"
+    dest: "{{ rootdir }}/ifcfg-br-int"
+
+- name: Configure Neutron Agents
+  template:
+    src: "neutron/neutron.conf.{{ version }}"
+    dest: "{{ rootdir }}/neutron.conf"
+  register: configure_neutron_agents
+
+- name: Configure Neutron Agents Ovs
+  template:
+    src: "neutron/openvswitch/plugin.ini"
+    dest: "{{ rootdir }}/plugin.ini"
+  register: configure_neutron_agents_ovs
+
+- name: Configure Neutron Agents Dhcp
+  template:
+    src: "neutron/dhcp_agent.ini.{{version}}"
+    dest: "{{ rootdir }}/dhcp_agent.ini"
+  register: configure_neutron_agents_dhcp
+
+- name: Configure Neutron Agents Dhcp DnsMasq MTU
+  copy:
+    src: "neutron/dnsmasq-neutron.conf"
+    dest: "{{ rootdir }}/dnsmasq-neutron.conf"
+  register: configure_neutron_agents_dhcp_mtu
+
+- name: Configure Neutron Agents L3
+  template:
+    src: "neutron/l3_agent.ini.{{ version }}"
+    dest: "{{ rootdir}}/l3_agent.ini"
+  register: configure_neutron_agents_l3
+
+- name: Configure Neutron Agents L3 Metadata
+  template:
+    src: "neutron/metadata_agent.ini.{{ version }}"
+    dest: "{{ rootdir}}/metadata_agent.ini"
+  register: configure_neutron_agents_l3_metadata
+
+- name: Create Neutron Agents Startfile
+  template:
+   src: "neutron/start_agents.sh.j2"
+   dest: "{{ rootdir }}/start.sh"
+  register: start_file
+
+- name: Create Neutron Agents Dockerfile
+  template:
+    src: "neutron/Dockerfile_agents.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+  register: dockerfile
+
+- name: Build Neutron Agents Image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}"
+  when: configure_neutron_agents.changed or configure_neutron_agents_ovs.changed or configure_neutron_agents_dhcp.changed or configure_neutron_agents_dhcp_mtu.changed or configure_neutron_agents_l3.changed or configure_neutron_agents_l3_metadata.changed or start_file.changed or dockerfile.changed

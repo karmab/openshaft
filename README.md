@@ -55,12 +55,22 @@ If using an nfs cinder backend:
 docker run --privileged -d --name cinder-volume openshaft/cinder-volume
 ```
 
+```
+docker run --privileged -d --name neutron-agents openshaft/neutron-agents
+```
+
 ## RUN CLIENT CONTAINER
 
 every image is built with bash and a keystonerc_admin you can use for testing
 
 ```
 docker run --name client -it openshaft/client
+```
+
+## FORCING REBUILD of a container
+
+```
+rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 ```
 
 ## TODO LIST

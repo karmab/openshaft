@@ -4,4 +4,7 @@
 su - keystone -s /bin/bash -c 'keystone-manage db_sync'
 su - glance -s /bin/bash -c 'glance-manage db_sync'
 cinder-manage db sync
+{% if neutron_core_plugin == 'ml2' %}
+ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
+{% endif %}
 neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head
