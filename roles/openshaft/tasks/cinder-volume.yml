@@ -1,8 +1,10 @@
 ---
 
-- name: Set Cinder Volume Caomponent
+- name: Set Cinder Volume Component
   set_fact:
     component: "cinder-volume"
+
+- include: sandbox.yml
 
 - name: Set Cinder Volume Prefix
   set_fact:

@@ -1,21 +1,3 @@
-components:
- - 'dbupgrader'
- - 'client'
- - 'keystone'
- - 'glance'
- - 'cinder'
- - 'cinder-volume'
- - 'neutron'
- - 'neutron-agents'
-# - 'neutron-dhcp'
-# - 'neutron-l3'
- - 'nova'
- - 'nova-compute'
- - 'heat'
- - 'ceilometer'
- - 'horizon'
- - 'swift'
- - 'swift-storage'
 apache_dir: /etc/httpd/conf.d
 apache_service: httpd
 wsgi_file: wsgi-keystone.conf.redhat

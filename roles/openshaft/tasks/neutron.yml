@@ -4,6 +4,8 @@
   set_fact:
     component: "neutron"
 
+- include: sandbox.yml
+
 - name: Set Neutron Prefix
   set_fact:
     rootdir: "{{ openshaft.rootdir }}/{{ component }}"

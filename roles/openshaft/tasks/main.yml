@@ -21,29 +21,6 @@
    - swift
    - swift-storage
 
-- include: sandbox.yml
-  tags:
-   - sandbox
-   - dbupgrader
-   - client
-   - ceilometer
-   - cinder
-   - cinder-volume
-   - compute
-   - glance
-   - heat
-   - horizon
-   - keystone
-   - neutron
-   - neutron-agents
-   - neutron-dhcp
-   - neutron-l3
-   - neutron-ovs
-   - nova
-   - nova-compute
-   - swift
-   - swift-storage
-
 - include: client.yml
   tags:
    - client

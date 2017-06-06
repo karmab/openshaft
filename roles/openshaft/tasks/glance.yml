@@ -4,6 +4,8 @@
   set_fact:
     component: "glance"
 
+- include: sandbox.yml
+
 - name: Set Glance Prefix
   set_fact:
     rootdir: "{{ openshaft.rootdir }}/{{ component }}"

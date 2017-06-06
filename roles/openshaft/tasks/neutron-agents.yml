@@ -4,6 +4,8 @@
   set_fact:
     component: "neutron-agents"
 
+- include: sandbox.yml
+
 - name: Set Neutron Agents Prefix
   set_fact:
     rootdir: "{{ openshaft.rootdir }}/{{ component }}"

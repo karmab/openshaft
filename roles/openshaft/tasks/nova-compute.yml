@@ -1,95 +1,57 @@
 ---
 
-- name: Install Common Openstack Packages
-  package:
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ openstack_packages }}"
+- name: Set Nova Compute Component
+  set_fact:
+    component: "nova-compute"
 
-- name: Install Nova Compute Packages
-  package: 
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ nova_compute_packages }}"
+- include: sandbox.yml
 
-- name: Install Nova Ceilometer Compute Packages
-  package: 
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ nova_compute_ceilometer_packages }}"
-  when: nova_ceilometer
+- name: Set Nova Compute Prefix
+  set_fact:
+    rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+    packages: "{{ nova_packages }}"
 
-- name: Enable Nova bridge module
-  modprobe:
-    name: bridge
-    state: present
 
-- name: Set Nova Sysctl Ip Forward
-  sysctl:
-    name: net.ipv4.ip_forward
-    value: 1
-    state: present
+- name: Create Neutron Agents Ovs ifcfg-br-int
+  template:
+    src: "neutron/ifcfg-br-int"
+    dest: "{{ rootdir }}/ifcfg-br-int"
 
-- name: Set Nova Sysctl All Rp Filter
-  sysctl:
-    name: net.ipv4.conf.all.rp_filter
-    value: 0
-    state: present
+- name: Configure Neutron Agents
+  template:
+    src: "neutron/neutron.conf.{{ version }}"
+    dest: "{{ rootdir }}/neutron.conf"
+  register: configure_neutron_agents
 
-- name: Set Nova Sysctl Default Rp Filter
-  sysctl:
-    name: net.ipv4.conf.default.rp_filter
-    value: 0
-    state: present
+- name: Configure Neutron Agents Ovs
+  template:
+    src: "neutron/openvswitch/plugin.ini"
+    dest: "{{ rootdir }}/plugin.ini"
+  register: configure_neutron_agents_ovs
 
-- name: Set Nova Sysctl Call Arptables
-  sysctl:
-    name: net.bridge.bridge-nf-call-arptables
-    value: 1
-    state: present
-  when: ansible_os_family == 'RedHat'
-
-- name: Set Nova Sysctl Call Ip6tables
-  sysctl:
-    name: net.bridge.bridge-nf-call-ip6tables
-    value: 1
-    state: present
-  when: ansible_os_family == 'RedHat'
-
-- name: Set Nova Sysctl Call Iptables
-  sysctl:
-    name: net.bridge.bridge-nf-call-iptables
-    value: 1
-    state: present
-  when: ansible_os_family == 'RedHat'
+- name: Add Iptables Dummy File
+  template:
+    src: "nova/iptables-dummy"
+    dest: "{{ rootdir }}/iptables-dummy"
 
 - name: Configure Nova Compute
   template:
-    src: "nova.conf.{{ version }}"
-    dest: "/etc/nova/nova.conf"
-    backup: yes
-  notify:
-   - Restart Nova Compute
+    src: "nova/nova.conf.{{ version }}"
+    dest: "{{ rootdir }}/nova.conf"
+  register: configure_nova_compute
 
-- name: Enable Nova Compute Services
-  service:
-    name: "{{ item }}"
-    enabled: yes
-    state: started
-  with_items:
-   - libvirtd
-   - "{{ nova_compute_service }}"
+- name: Create Nova Compute Startfile
+  template:
+   src: "nova/start_compute.sh.j2"
+   dest: "{{ rootdir }}/start.sh"
+  register: start_file
 
-- name: Enable Nova Compute Messagebus
-  service:
-    name: "messagebus"
-    enabled: yes
-    state: started
-  when: ansible_os_family == 'RedHat'
+- name: Create Nova Compute Dockerfile
+  template:
+    src: "nova/Dockerfile_compute.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+  register: dockerfile
 
-- name: Enable Nova Compute Ceilometer Service
-  service:
-    name: "{{ ceilometer_compute_service }}"
-    enabled: yes
-    state: started
-  when: nova_ceilometer
+- name: Build Nova Compute Image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}"
+  when: configure_neutron_agents.changed or configure_neutron_agents_ovs.changed or configure_nova_compute.changed or start_file.changed or dockerfile.changed
