@@ -1,0 +1,28 @@
+#!/usr/bin/bash
+
+# bootstrap
+sed -i --follow-symlinks "s/MYIP/`hostname -I`/" /etc/nova/nova.conf
+mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "use {{ component }} ;"
+if [ "$?" != "0" ] ; then
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}.* TO '{{ vars[component]['dbuser'] }}'@'%' identified by '{{ vars[component]['dbpassword'] }}' ;"
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }}_api ;"
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}_api.* TO '{{ vars[component+'_api']['dbuser'] }}'@'%' identified by '{{ vars[component+'_api']['dbpassword'] }}' ;"
+  nova-manage db sync
+  {% if version not in ['kilo','liberty'] %}
+  nova-manage api_db sync
+  {% endif %}
+  source /root/keystonerc_admin
+  openstack project create --description "Service Project" services
+  openstack service create  --name nova --description "Openstack Compute Service" compute
+  openstack endpoint create --region {{ common.region }} --publicurl '{{ nova_public_url }}' --internalurl '{{ nova_internal_url }}' --adminurl '{{ nova_admin_url }}' compute
+  openstack user create --password {{ nova.password }} nova
+  openstack role add --project services --user nova admin
+fi
+
+# run command
+#nova-cert &
+nova-consoleauth &
+nova-scheduler &
+nova-conductor &
+nova-api

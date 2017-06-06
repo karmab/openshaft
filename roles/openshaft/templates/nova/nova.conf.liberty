@@ -1833,7 +1833,7 @@ vncserver_listen = {{ nova.vncserver_listen }}
 
 # The address to which proxy clients (like nova-xvpvncproxy)
 # should connect (string value)
-vncserver_proxyclient_address = {{ nova_vnc_ip }}
+vncserver_proxyclient_address = MYIP
 
 # Enable VNC related features (boolean value)
 #vnc_enabled=true

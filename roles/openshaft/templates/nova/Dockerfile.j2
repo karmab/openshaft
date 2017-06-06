@@ -1,0 +1,20 @@
+FROM centos:7
+MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
+
+RUN yum -y install centos-release-openstack-newton && yum -y install iptables mariadb {{ packages | join (' ') }} && yum clean all
+
+ADD     keystonerc_admin /root
+ADD     keystonerc_admin_v3 /root
+ADD     nova.conf /etc/nova
+ADD     iptables-dummy /sbin/iptables-dummy
+RUN     mv /sbin/iptables-save /sbin/iptables-save.old
+RUN     mv /sbin/iptables-restore /sbin/iptables-restore-old
+RUN     ln -s /sbin/iptables-dummy /sbin/iptables-save
+RUN     ln -s /sbin/iptables-dummy /sbin/iptables-restore
+ADD     start.sh /usr/bin
+
+RUN     chown root:root /sbin/iptables-dummy && chmod u+x /sbin/iptables-dummy
+RUN     chown root:root /usr/bin/start.sh && chmod u+x /usr/bin/start.sh
+
+ENTRYPOINT  ["/usr/bin/start.sh"]
+EXPOSE 8773 8774 8775 6080

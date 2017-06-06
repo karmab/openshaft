@@ -1,75 +1,37 @@
 ---
 
-- name: Install Common Openstack Packages
-  package:
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ openstack_packages }}"
+- name: Set Nova Component
+  set_fact:
+    component: "nova"
 
-- name: Install Nova Packages
-  package: 
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ nova_packages }}"
+- name: Set Nova Prefix
+  set_fact:
+    rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+    packages: "{{ openstack_packages + nova_packages }}"
+
+- name: Add Iptables Dummy File
+  template:
+    src: "nova/iptables-dummy"
+    dest: "{{ rootdir }}/iptables-dummy"
 
 - name: Configure Nova
   template:
-    src: "nova.conf.{{ version }}"
-    dest: "/etc/nova/nova.conf"
-    backup: yes
-  notify:
-   - Restart Nova
+    src: "nova/nova.conf.{{ version }}"
+    dest: "{{ rootdir }}/nova.conf"
+  register: configure_nova
 
-#- name: Check Nova Database Version
-#  shell: nova-manage db version
-#  register: nova_db_version
-#  changed_when: false
+- name: Create Nova Startfile
+  template:
+   src: "nova/start.sh.j2"
+   dest: "{{ rootdir }}/start.sh"
+  register: start_file
 
-- name: Populate Nova Database
-  run_once: yes
-  shell: nova-manage db sync
-#  when: nova_db_version.stdout == "0"
-#
-- name: Populate Nova Api Database
-  run_once: yes
-  shell: nova-manage api_db sync
-  when: version not in ['kilo','liberty']
+- name: Create Nova Dockerfile
+  template:
+    src: "nova/Dockerfile.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+  register: dockerfile
 
-- name: Create Nova User
-  keystone_user:
-    state: present
-    endpoint: "{{ keystone_admin_url }}"
-    token: "{{ keystone.admin_token }}"
-    user: nova
-    tenant: services
-    password: "{{ nova.password }}"
-
-- name: Grant Nova Admin Role
-  keystone_user:
-    endpoint: "{{ keystone_admin_url }}"
-    token: "{{ keystone.admin_token }}"
-    tenant: services
-    user: nova
-    role: admin
-
-- name: Create Nova Service And Endpoint
-  keystone_service: 
-    name: nova
-    type: compute
-    description: "Nova Volume Service"
-    publicurl: "{{ nova_public_url }}"
-    internalurl: "{{ nova_internal_url }}"
-    adminurl: "{{ nova_admin_url }}"
-    endpoint: "{{ keystone_internal_url }}"
-    login_user: admin
-    login_password: "{{ keystone.admin_password }}"
-    tenant_name: admin
-    region: "{{ common.region }}"
-
-- name: Enable Nova Services
-  service:
-    name: "{{ item }}"
-    enabled: yes
-    state: started
-  with_items: "{{ nova_services }}"
-  when: ansible_connection != 'docker'
+- name: Build Nova Image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}"
+  when: configure_nova.changed or start_file.changed or dockerfile.changed

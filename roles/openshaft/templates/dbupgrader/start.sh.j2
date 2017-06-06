@@ -8,3 +8,8 @@ cinder-manage db sync
 ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
 {% endif %}
 neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head
+{% if version not in ['kilo','liberty'] %}
+nova-manage api_db sync
+{% else %}
+nova-manage db sync
+{% endif %}

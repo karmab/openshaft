@@ -58,7 +58,7 @@
     glance_public_url: "{{ glance.public_url | default('http://' ~ glance_host ~ ':9292') }}"
     glance_internal_url: "{{ glance.internal_url | default('http://' ~ glance_host ~ ':9292') }}"
     glance_admin_url: "{{ glance.admin_url | default('http://' ~ glance_host ~ ':9292') }}"
-    glance_api_servers: "{{ [glance.hosts, common.glance_hosts] | first_found | default(['127.0.0.1']) }}"
+    glance_api_servers: "{{ [glance.hosts, common.glance_hosts] | first_found | default(['glance']) }}"
     cinder_public_url: "{{ cinder.public_url | default('http://' ~ cinder_host ~ ':8776/v1/%(tenant_id)s') }}"
     cinder_internal_url: "{{ cinder.internal_url_v2 | default('http://' ~ cinder_host ~ ':8776/v1/%(tenant_id)s') }}"
     cinder_admin_url: "{{ cinder.admin_url | default('http://' ~ cinder_host ~ ':8776/v1/%(tenant_id)s') }}"

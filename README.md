@@ -45,6 +45,7 @@ docker run -d --name keystone -p 5000:5000 -p 35357:35357 openshaft/keystone
 docker run -d --name glance -p 9191:9191 -p 9292:9292 -v /tmp/openshaft/glance_data:/var/lib/glance openshaft/glance
 docker run -d --name cinder -p 8776:8776 openshaft/cinder
 docker run -d --name neutron -p 9696:9696 openshaft/neutron
+docker run -d --name nova -p 6080:6080 -p 8773:8773 -p 8774:8774 -p 8775:8775 openshaft/nova
 ```
 
 ## PRIVILEGED CONTAINERS
@@ -78,6 +79,8 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 - create openshift templates for deployment
 - enable pushing to docker registry
 - improve documentation !!!
+- remove ugly iptables hack for nova ( from larsk)
+- mount loop a file to provider lvm based cinder-volume
 
 ## Problems?
 

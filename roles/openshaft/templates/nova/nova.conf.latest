@@ -8488,7 +8488,7 @@ vncserver_listen={{ nova.vncserver_listen }}
 #  (string value)
 # Deprecated group;name - DEFAULT;vncserver_proxyclient_address
 #vncserver_proxyclient_address=127.0.0.1
-vncserver_proxyclient_address={{ nova_vnc_ip }}
+vncserver_proxyclient_address=MYIP
 
 #
 # Public address of noVNC VNC console proxy.
