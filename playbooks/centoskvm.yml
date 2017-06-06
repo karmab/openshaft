@@ -1,0 +1,63 @@
+---
+- name: Openshaft It!!!
+  hosts: openshaft
+  remote_user: centos
+  gather_facts: true
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+   - name: Load Kvm Module
+     modprobe:
+      name: kvm_intel
+      state: present
+      params: nested=1
+   - name: Install Packages
+     package:
+      name: "{{ item }}"
+      state: present
+     with_items:
+      - docker
+      - nfs-utils
+      - libvirt
+      - libvirt-daemon-driver-qemu
+      - qemu-kvm
+   - name: Enable Services
+     service:
+      name: "{{ item }}"
+      enabled: yes
+      state: started
+     with_items:
+      - docker
+      - nfs
+      - libvirtd
+      - virtlogd
+   - name: Add Hosts Entry
+     lineinfile:
+      dest: /etc/hosts
+      line: '172.17.0.1 mysql controller rabbitmq glance cinder neutron nova heat ceilometer swift rabbit nfs'
+   - name: Create Glance Data Directory
+     file:
+      path: /glance_data
+      state: directory
+   - name: Create Cinder Directory
+     file:
+      path: /cinder
+      state: directory
+      owner: 165
+      group: 165
+   - name: Create Cinder Nfs Share
+     lineinfile:
+      dest: /etc/exports
+      line: '/cinder *(rw,insecure,no_root_squash)'
+     register: cinder
+   - name: Enable Cinder Nfs Share
+     command: exportfs -r
+     when: cinder.changed
+   - name: Pull Mysql Image
+     command: docker pull mysql:latest
+   - name: Pull Rabbit Image
+     command: docker pull rabbitmq:3-management
+#   - name: Apply Openshaft Role
+#     include_role:
+#         name: openshaft

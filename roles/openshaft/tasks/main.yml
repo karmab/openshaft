@@ -53,18 +53,6 @@
   tags:
    - neutron-agents
 
-#- include: neutron-dhcp.yml
-#  tags:
-#   - neutron-dhcp
-#
-#- include: neutron-l3.yml
-#  tags:
-#   - neutron-l3
-#
-#- include: neutron-ovs.yml
-#  tags:
-#   - neutron-ovs
-
 - include: nova.yml
   tags:
    - nova
@@ -73,22 +61,22 @@
   tags:
    - nova-compute
 
-- include: heat.yml
-  tags:
-   - heat
-
-- include: ceilometer.yml
-  tags:
-   - ceilometer
-
-- include: horizon.yml
-  tags:
-   - horizon
-
-- include: swift.yml
-  tags:
-   - swift
-
-- include: swift-storage.yml
-  tags:
-   - swift-storage
+#- include: heat.yml
+#  tags:
+#   - heat
+#
+#- include: ceilometer.yml
+#  tags:
+#   - ceilometer
+#
+#- include: horizon.yml
+#  tags:
+#   - horizon
+#
+#- include: swift.yml
+#  tags:
+#   - swift
+#
+#- include: swift-storage.yml
+#  tags:
+#   - swift-storage

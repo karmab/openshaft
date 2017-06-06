@@ -1,5 +1,5 @@
 ---
-- name: Openshaft it!!!
+- name: Openshaft It!!!
   hosts: localhost
   remote_user: centos
   gather_facts: true

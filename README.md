@@ -12,7 +12,7 @@ you also want to export ANSIBLE_ROLES_PATH so that you can see the openshaft rol
 ## BUILD ALL COMPONENT IMAGES
 
 ```
-ansible-playbook playbooks/all.yml
+ansible-playbook playbooks/centos.yml
 ```
 
 ## BUILD SPECIFIC COMPONENT IMAGE
@@ -20,7 +20,7 @@ ansible-playbook playbooks/all.yml
 You can use tagging for this. For instance, to only build keystone image,
 
 ```
-ansible-playbook playbooks/all.yml  --tags=keystone
+ansible-playbook playbooks/centos.yml  --tags=keystone
 ```
 
 ## RUN HELPER CONTAINERS

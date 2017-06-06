@@ -1,7 +1,13 @@
 #!/usr/bin/bash
 
 # run command
-modprobe openvswitch
+modprobe openvswitch bridge
+echo 1 > /sys/net/ipv4/ip_forward
+echo 0 > /sys/net/ipv4/conf/all/rp_filter
+echo 0 > /sys/net/ipv4/conf/default/rp_filter
+echo 1 > /sys/net/bridge/bridge-nf-call-arptables
+echo 1 > /sys/net/bridge/bridge-nf-call-iptables
+echo 1 > /sys/net/bridge/bridge-nf-call-ip6tables
 /usr/share/openvswitch/scripts/ovs-ctl start
 ovs-vsctl add-br br-int
 ovs-vsctl add-br br-tun
@@ -32,3 +38,5 @@ neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file 
 {% endif %}
 
 #nova compute
+libvirtd &
+nova-compute --config-file=/etc/nova/nova.conf

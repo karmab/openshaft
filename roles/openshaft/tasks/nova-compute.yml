@@ -9,8 +9,12 @@
 - name: Set Nova Compute Prefix
   set_fact:
     rootdir: "{{ openshaft.rootdir }}/{{ component }}"
-    packages: "{{ nova_packages }}"
+    packages: "{{ openstack_packages + nova_compute_packages + neutron_packages }}"
 
+- name: Set Nova Compute Ceilometer Packages
+  set_fact:
+    packages: "{{ openstack_packages + nova_compute_packages + neutron_packages + nova_compute_ceilometer_packages }}"
+  when: nova_ceilometer
 
 - name: Create Neutron Agents Ovs ifcfg-br-int
   template:
