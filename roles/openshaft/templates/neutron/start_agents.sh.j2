@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
 # run command
-modprobe openvswitch
 /usr/share/openvswitch/scripts/ovs-ctl start
 ovs-vsctl add-br br-int
 ovs-vsctl add-br br-tun

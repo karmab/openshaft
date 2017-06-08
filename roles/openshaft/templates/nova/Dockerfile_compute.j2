@@ -3,8 +3,8 @@ MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
 
 RUN yum -y install centos-release-openstack-newton && yum -y install {{ packages | join (' ') }} && yum clean all
 
-ADD     keystonerc_admin /root
-ADD     keystonerc_admin_v3 /root
+ADD     keystonerc_admin /
+ADD     keystonerc_admin_v3 /
 ADD     neutron.conf /etc/neutron
 ADD     nova.conf /etc/nova
 ADD     iptables-dummy /sbin/iptables-dummy

@@ -6,7 +6,7 @@ if [ "$?" != "0" ] ; then
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}.* TO '{{ vars[component]['dbuser'] }}'@'%' identified by '{{ vars[component]['dbpassword'] }}' ;"
   su - glance -s /bin/bash -c 'glance-manage db_sync'
-  source /root/keystonerc_admin
+  source /keystonerc_admin
   openstack project create --description "Service Project" services
   openstack service create  --name glance --description "Openstack Image Service" image
   openstack endpoint create --region {{ common.region }} --publicurl '{{ glance_public_url }}' --internalurl '{{ glance_internal_url }}' --adminurl '{{ glance_admin_url }}' image

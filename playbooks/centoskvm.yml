@@ -7,6 +7,10 @@
   become_user: root
   become_method: sudo
   tasks:
+   - name: Disable Selinux
+     selinux:
+      policy: targeted
+      state: permissive
    - name: Load Kvm Module
      modprobe:
       name: kvm_intel
@@ -55,9 +59,9 @@
      command: exportfs -r
      when: cinder.changed
    - name: Pull Mysql Image
-     command: docker pull mysql:latest
+     command: 'docker pull mysql:latest'
    - name: Pull Rabbit Image
-     command: docker pull rabbitmq:3-management
-#   - name: Apply Openshaft Role
-#     include_role:
-#         name: openshaft
+     command: 'docker pull rabbitmq:3-management'
+   - name: Include Openshaft Role
+     include_role:
+      name: openshaft

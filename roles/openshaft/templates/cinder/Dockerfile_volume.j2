@@ -3,8 +3,8 @@ MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
 
 RUN yum -y install centos-release-openstack-newton && yum -y install mariadb nfs-utils {{ packages | join (' ') }} && yum clean all
 
-ADD     keystonerc_admin /root
-ADD     keystonerc_admin_v3 /root
+ADD     keystonerc_admin /
+ADD     keystonerc_admin_v3 /
 ADD     cinder.conf /etc/cinder
 {% if cinder.volume_driver == 'cinder.volume.drivers.nfs.NfsDriver' %}
 ADD     nfs_shares /etc/cinder

@@ -28,7 +28,7 @@ ansible-playbook playbooks/centos.yml  --tags=keystone
 I use existing mysql and rabbit containers
 
 ```
-docker run --name proutsql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=unix1234 -d mysql:latest
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=mysql -d mysql:latest
 docker run --name rabbit -p 5672:5672 -d --hostname rabbit -e RABBITMQ_DEFAULT_USER=guest -e RABBITMQ_DEFAULT_PASS=guest rabbitmq:3-management
 ```
 
@@ -55,6 +55,8 @@ If using an nfs cinder backend:
 ```
 docker run --privileged -d --name cinder-volume openshaft/cinder-volume
 ```
+
+for neutron openvswitch, make sure openvswitch is loaded on the host ( and selinux disabled) !!!
 
 ```
 docker run --privileged -d --name neutron-agents openshaft/neutron-agents

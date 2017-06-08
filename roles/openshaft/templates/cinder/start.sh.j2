@@ -6,7 +6,7 @@ if [ "$?" != "0" ] ; then
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}.* TO '{{ vars[component]['dbuser'] }}'@'%' identified by '{{ vars[component]['dbpassword'] }}' ;"
   cinder-manage db sync
-  source /root/keystonerc_admin
+  source /keystonerc_admin
   openstack project create --description "Service Project" services
   openstack service create  --name cinder --description "Cinder Volume Service" volume
   openstack service create  --name cinderv2 --description "CinderV2 Volume Service" volumev2

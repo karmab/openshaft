@@ -3,8 +3,8 @@ MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
 
 RUN yum -y install centos-release-openstack-newton && yum -y install mariadb {{ packages | join (' ') }} && yum clean all
 
-ADD     keystonerc_admin /root
-ADD     keystonerc_admin_v3 /root
+ADD     keystonerc_admin /
+ADD     keystonerc_admin_v3 /
 ADD     glance-api.conf /etc/glance
 ADD     glance-registry.conf /etc/glance
 ADD     start.sh /usr/bin

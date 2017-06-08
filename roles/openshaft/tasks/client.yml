@@ -4,6 +4,8 @@
   set_fact:
     component: "client"
 
+- include: sandbox.yml
+
 - name: Set Client Prefix
   set_fact:
     rootdir: "{{ openshaft.rootdir }}/{{ component }}"
