@@ -1,0 +1,38 @@
+---
+- name: Openshaft It !!!
+  hosts: openshaft
+  remote_user: centos
+  gather_facts: true
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+#   - include_role:
+#       name: openshaft
+#       tasks_from: variables.yml
+#   - debug: var=common
+   - set_fact:
+      mysql_password: mysql
+      rabbit_user: guest
+      rabbit_password: guest
+      hosts: '--add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1'
+   - name: Run Mysql
+     command: 'docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD={{ mysql_password }} -d mysql:latest'
+   - pause:
+       seconds: 20
+   - name: Run Rabbit
+     command: 'docker run --name rabbit -p 5672:5672 -d --hostname rabbit -e RABBITMQ_DEFAULT_USER={{ rabbit_user }} -e RABBITMQ_DEFAULT_PASS={{ rabbit_password }} rabbitmq:3-management'
+   - name: Run Keystone
+     command: 'docker run -d --name keystone {{ hosts }} -p 5000:5000 -p 35357:35357 openshaft/keystone'
+   - name: Run Glance
+     command: 'docker run -d --name glance {{ hosts }} -p 9191:9191 -p 9292:9292 -v /tmp/openshaft/glance_data:/var/lib/glance openshaft/glance'
+   - name: Run Cinder
+     command: 'docker run -d --name cinder {{ hosts }} -p 8776:8776 openshaft/cinder'
+   - name: Run Cinder Volume
+     command: 'docker run --privileged -d --name cinder-volume {{ hosts }} openshaft/cinder-volume'
+   - name: Run Neutron
+     command: 'docker run -d --name neutron {{ hosts }} -p 9696:9696 openshaft/neutron'
+   - name: Run Neutron Agents
+     command: 'docker run --privileged -d --name neutron-agents {{ hosts }} openshaft/neutron-agents'
+   - name: Run Nova
+     command: 'docker run -d --name nova {{ hosts }} -p 6080:6080 -p 8773:8773 -p 8774:8774 -p 8775:8775 openshaft/nova'
