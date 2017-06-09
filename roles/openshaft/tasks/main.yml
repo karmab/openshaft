@@ -61,9 +61,9 @@
   tags:
    - nova-compute
 
-#- include: heat.yml
-#  tags:
-#   - heat
+- include: heat.yml
+  tags:
+   - heat
 #
 #- include: ceilometer.yml
 #  tags:

@@ -2,8 +2,16 @@ FROM centos:7
 MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
 
 RUN yum -y install centos-release-openstack-{{ common.version }} && yum -y install mariadb {{ packages | join (' ') }} && yum clean all
+{%  if version != 'kilo' %}
+RUN yum -y install python-PyMySQL
+{% endif %}
 
 ADD     keystonerc_admin /
 ADD     keystonerc_admin_v3 /
+ADD     heat.conf /etc/heat
+ADD     start.sh /usr/bin
 
-ENTRYPOINT  ["/bin/bash"]
+RUN     chown root:root /usr/bin/start.sh && chmod u+x /usr/bin/start.sh
+
+ENTRYPOINT  ["/usr/bin/start.sh"]
+EXPOSE 8000 8003 8004

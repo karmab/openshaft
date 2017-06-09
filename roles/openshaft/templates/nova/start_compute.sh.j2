@@ -28,15 +28,17 @@ ovs-vsctl add-port {{ item | regex_replace('(.*):.*', '\\1') }} {{ item | regex_
 {% if version == 'kilo' and plugin_ini is not defined %}
 ln -s /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini /etc/neutron/plugin.ini
 sed -i --follow-symlinks "s/MYIP/`hostname -I`/" /etc/neutron/plugin.ini
-neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/openvswitch_agent.ini &
+neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/openvswitch_agent.ini >/var/log/neutron/openvswitch-agent.log  2>&1 &
 {% endif %}
 
 {% if version != 'kilo' and plugin_ini is not defined %}
 ln -s /etc/neutron/plugins/ml2/openvswitch_agent.ini /etc/neutron/plugin.ini
 sed -i --follow-symlinks "s/MYIP/`hostname -I`/" /etc/neutron/plugin.ini
-neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/openvswitch_agent.ini &
+neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/openvswitch_agent.ini >/var/log/neutron/openvswitch-agent.log  2>&1 &
 {% endif %}
 
 #nova compute
-libvirtd &
+libvirtd > /var/log/libvirt/libvirt.log 2>&1 &
+virtlogd > /var/log/libvirt/virtlogd.log 2>&1 &
+sed -i "s/.*sysinfo_serial=.*/sysinfo_serial=none/" /etc/nova/nova.conf
 nova-compute --config-file=/etc/nova/nova.conf

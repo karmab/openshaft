@@ -1,7 +1,7 @@
 FROM centos:7
 MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
 
-RUN yum -y install centos-release-openstack-newton && yum -y install {{ packages | join (' ') }} && yum clean all
+RUN yum -y install centos-release-openstack-{{ common.version }} && yum -y install {{ packages | join (' ') }} && yum clean all
 
 ADD     keystone.conf /etc/keystone
 ADD     glance-registry.conf /etc/glance

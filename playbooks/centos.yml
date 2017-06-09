@@ -11,6 +11,14 @@
      selinux:
       policy: targeted
       state: permissive
+   - name: Load Openvswitch Module
+     modprobe:
+      name: openvswitch
+      state: present
+   - name: Make sure Openvswitch Module Gets Loaded
+     copy:
+      content: "openvswitch"
+      dest: /etc/modules-load.d/openvswitch.conf
    - name: Load Kvm Module
      modprobe:
       name: kvm_intel

@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+# bootstrap
+mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "use {{ component }} ;"
+if [ "$?" != "0" ] ; then
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"
+  mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}.* TO '{{ vars[component]['dbuser'] }}'@'%' identified by '{{ vars[component]['dbpassword'] }}' ;"
+  heat-manage db_sync
+  source /keystonerc_admin
+  openstack project create --description "Service Project" services
+  openstack service create  --name heat --description "Heat Orchestration Service" orchestration
+  openstack service create  --name heat-cfn --description "Heat CloudFormation Service" cloudformation
+  openstack endpoint create --region {{ common.region }} --publicurl '{{ heat_public_url }}' --internalurl '{{ heat_internal_url }}' --adminurl '{{ heat_admin_url }}' orchestration
+  openstack endpoint create --region {{ common.region }} --publicurl '{{ heat_cfn_public_url }}' --internalurl '{{ heat_cfn_internal_url }}' --adminurl '{{ heat_cfn_admin_url }}' cloudformation
+  openstack user create --password {{ heat.password }} heat
+  openstack role add --project services --user heat admin
+fi
+
+# run command
+heat-api-cfn heat-api-cfn --config-file /usr/share/heat/heat-dist.conf --config-file /etc/heat/heat.conf &
+heat-engine --config-file /usr/share/heat/heat-dist.conf --config-file /etc/heat/heat.conf &
+heat-api --config-file /usr/share/heat/heat-dist.conf --config-file /etc/heat/heat.conf
