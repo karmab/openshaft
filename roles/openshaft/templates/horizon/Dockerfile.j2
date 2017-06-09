@@ -1,0 +1,14 @@
+FROM centos:7
+MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
+
+RUN yum -y install centos-release-openstack-{{ common.version }} && yum -y install {{ packages  | join (' ') }} && yum clean all
+
+ADD     keystonerc_admin /
+ADD     keystonerc_admin_v3 /
+ADD     local_settings /etc/openstack-dashboard
+ADD     start.sh /usr/bin
+
+RUN     chown root:root /usr/bin/start.sh && chmod u+x /usr/bin/start.sh
+
+ENTRYPOINT  ["/usr/bin/start.sh"]
+EXPOSE      80 443

@@ -54,6 +54,7 @@ docker run -d --name cinder -p 8776:8776 openshaft/cinder
 docker run -d --name neutron -p 9696:9696 openshaft/neutron
 docker run -d --name nova -p 6080:6080 -p 8773:8773 -p 8774:8774 -p 8775:8775 openshaft/nova
 docker run -d --name heat -p 8000:8000 -p 8003:8003 -p 8004:8004 openshaft/heata
+docker run -d --name keystone -p 80:80 -p 443:443 openshaft/horizon
 ```
 
 ## RUN PRIVILEGED CONTAINERS

@@ -64,14 +64,11 @@
 - include: heat.yml
   tags:
    - heat
-#
-#- include: ceilometer.yml
-#  tags:
-#   - ceilometer
-#
-#- include: horizon.yml
-#  tags:
-#   - horizon
+
+- include: horizon.yml
+  tags:
+   - horizon
+
 #
 #- include: swift.yml
 #  tags:
@@ -80,3 +77,8 @@
 #- include: swift-storage.yml
 #  tags:
 #   - swift-storage
+#
+#- include: ceilometer.yml
+#  tags:
+#   - ceilometer
+#

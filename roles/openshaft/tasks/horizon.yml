@@ -1,36 +1,34 @@
 ---
 
-- name: Install Common Openstack Packages
-  package:
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ openstack_packages }}"
+- name: Set Horizon Component
+  set_fact:
+      component: "horizon"
 
-- name: Install Horizon Packages
-  package: 
-    name: '{{ item }}'
-    state: latest
-  with_items: "{{ horizon_packages }}"
+- include: sandbox.yml
+
+- name: Set Horizon Prefix
+  set_fact:
+      rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+      packages: "{{ openstack_packages + horizon_packages }}"
 
 - name: Configure Horizon
   template:
-#    src: "local_settings.{{ version }}"
-    src: "local_settings"
-    dest: "/etc/openstack-dashboard/local_settings"
-    backup: yes
-  notify:
-    - Restart Apache
+    src: "horizon/local_settings"
+    dest: "{{ rootdir }}/local_settings"
+  register: configure_horizon
 
-- name: Configure Horizon Selinux
-  seboolean:
-   name: httpd_can_network_connect
-   state: yes
-   persistent: yes
-  when: ansible_os_family == 'RedHat'
+- name: Create Horizon Startfile
+  template:
+    src: "horizon/start.sh.j2"
+    dest: "{{ rootdir }}/start.sh"
+  register: start_file
 
-- name: Enable Apache Service
-  service:
-   name: "{{ apache_service }}"
-   enabled: yes
-   state: started
-  when: ansible_connection != 'docker'
+- name: Create Horizon Dockerfile
+  template:
+    src: "horizon/Dockerfile.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+  register: dockerfile
+
+- name: Build Horizon Image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
+  when: configure_horizon.changed or start_file.changed or dockerfile.changed
