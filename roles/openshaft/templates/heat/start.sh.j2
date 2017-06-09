@@ -17,6 +17,6 @@ if [ "$?" != "0" ] ; then
 fi
 
 # run command
-heat-api-cfn heat-api-cfn --config-file /usr/share/heat/heat-dist.conf --config-file /etc/heat/heat.conf &
+heat-api-cfn --config-file /usr/share/heat/heat-dist.conf --config-file /etc/heat/heat.conf &
 heat-engine --config-file /usr/share/heat/heat-dist.conf --config-file /etc/heat/heat.conf &
 heat-api --config-file /usr/share/heat/heat-dist.conf --config-file /etc/heat/heat.conf
