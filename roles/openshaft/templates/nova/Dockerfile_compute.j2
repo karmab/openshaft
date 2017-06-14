@@ -7,11 +7,6 @@ ADD     keystonerc_admin /
 ADD     keystonerc_admin_v3 /
 ADD     neutron.conf /etc/neutron
 ADD     nova.conf /etc/nova
-ADD     iptables-dummy /sbin/iptables-dummy
-RUN     mv /sbin/iptables-save /sbin/iptables-save.old
-RUN     mv /sbin/iptables-restore /sbin/iptables-restore-old
-RUN     ln -s /sbin/iptables-dummy /sbin/iptables-save
-RUN     ln -s /sbin/iptables-dummy /sbin/iptables-restore
 {% if version == 'kilo' %}
 ADD     plugin.ini /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini
 {% else %}
@@ -20,7 +15,6 @@ ADD     plugin.ini /etc/neutron/plugins/ml2/openvswitch_agent.ini
 ADD     ifcfg-br-int /etc/sysconfig/network-scripts
 ADD     start.sh /usr/bin
 
-RUN     chown root:root /sbin/iptables-dummy && chmod u+x /sbin/iptables-dummy
 RUN     chown root:root /usr/bin/start.sh && chmod u+x /usr/bin/start.sh
 
 ENTRYPOINT  ["/usr/bin/start.sh"]

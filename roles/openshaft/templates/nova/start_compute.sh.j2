@@ -1,13 +1,12 @@
 #!/usr/bin/bash
 
 # run command
-modprobe openvswitch bridge
-echo 1 > /sys/net/ipv4/ip_forward
-echo 0 > /sys/net/ipv4/conf/all/rp_filter
-echo 0 > /sys/net/ipv4/conf/default/rp_filter
-echo 1 > /sys/net/bridge/bridge-nf-call-arptables
-echo 1 > /sys/net/bridge/bridge-nf-call-iptables
-echo 1 > /sys/net/bridge/bridge-nf-call-ip6tables
+#echo 1 > /sys/net/ipv4/ip_forward
+#echo 0 > /sys/net/ipv4/conf/all/rp_filter
+#echo 0 > /sys/net/ipv4/conf/default/rp_filter
+#echo 1 > /sys/net/bridge/bridge-nf-call-arptables
+#echo 1 > /sys/net/bridge/bridge-nf-call-iptables
+#echo 1 > /sys/net/bridge/bridge-nf-call-ip6tables
 /usr/share/openvswitch/scripts/ovs-ctl start
 ovs-vsctl add-br br-int
 ovs-vsctl add-br br-tun
@@ -41,4 +40,5 @@ neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file 
 libvirtd > /var/log/libvirt/libvirt.log 2>&1 &
 virtlogd > /var/log/libvirt/virtlogd.log 2>&1 &
 sed -i "s/.*sysinfo_serial=.*/sysinfo_serial=none/" /etc/nova/nova.conf
+sed -i "s/MYIP/`hostname -I`/" /etc/nova/nova.conf
 nova-compute --config-file=/etc/nova/nova.conf

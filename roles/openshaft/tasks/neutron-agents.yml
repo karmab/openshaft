@@ -34,11 +34,11 @@
     dest: "{{ rootdir }}/dhcp_agent.ini"
   register: configure_neutron_agents_dhcp
 
-- name: Configure Neutron Agents Dhcp DnsMasq MTU
+- name: Configure Neutron Agents Dhcp DnsMasq
   copy:
-    src: "neutron/dnsmasq-neutron.conf"
-    dest: "{{ rootdir }}/dnsmasq-neutron.conf"
-  register: configure_neutron_agents_dhcp_mtu
+    src: "neutron/dnsmasq.conf"
+    dest: "{{ rootdir }}/dnsmasq.conf"
+  register: configure_neutron_agents_dhcp_dnsmasq
 
 - name: Configure Neutron Agents L3
   template:
@@ -66,4 +66,4 @@
 
 - name: Build Neutron Agents Image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}"
-  when: configure_neutron_agents.changed or configure_neutron_agents_ovs.changed or configure_neutron_agents_dhcp.changed or configure_neutron_agents_dhcp_mtu.changed or configure_neutron_agents_l3.changed or configure_neutron_agents_l3_metadata.changed or start_file.changed or dockerfile.changed
+  when: configure_neutron_agents.changed or configure_neutron_agents_ovs.changed or configure_neutron_agents_dhcp.changed or configure_neutron_agents_dhcp_dnsmasq.changed or configure_neutron_agents_l3.changed or configure_neutron_agents_l3_metadata.changed or start_file.changed or dockerfile.changed
