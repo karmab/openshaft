@@ -71,6 +71,29 @@ for neutron openvswitch, make sure openvswitch is loaded on the host ( and selin
 ```
 docker run --privileged -d --name neutron-agents openshaft/neutron-agents
 ```
+## HANDLING EXTERNAL CONNECTIVIY WHEN TESTING ON DOCKER
+
+on the docker host
+```
+brctl addbr external
+brctl addif external eth1
+ip link add int type veth peer name ext
+brctl addif external ext
+ip link set netns `docker inspect --format '{{.State.Pid}}' neutron-agents` int
+ip link set eth1 up
+ip link set ext up
+ip link set external up
+echo net.ipv4.conf.all.rp_filter=0 >> /etc/sysctl.d/99-sysctl.conf
+echo net.ipv4.conf.default.rp_filter=0 >> /etc/sysctl.d/99-sysctl.conf
+sysctl -p /etc/sysctl.conf
+```
+
+on the neutron-agents container 
+```
+ovs-vsctl add-port br-ex int
+ip link set int up
+ip link set br-ex up
+```
 
 ## RUN CLIENT CONTAINER
 
@@ -88,11 +111,11 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 
 ## TODO LIST
 
+- find out which detail change that prevents instances from booting now!!!!
 - create openshift templates for deployment
 - enable pushing to docker registry
 - improve documentation
-- remove ugly iptables hack for nova ?
-- mount loop a file to provide lvm based cinder-volume without dedicated host disk
+- make sure router information persists on the neutron-agents ?
 
 ## Problems?
 
