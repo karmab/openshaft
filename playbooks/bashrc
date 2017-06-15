@@ -1,0 +1,26 @@
+# .bashrc
+
+# User specific aliases and functions
+
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+alias openshaft_keystone="docker run -d --name keystone --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 -p 5000:5000 -p 35357:35357 openshaft/keystone"
+alias openshaft_glance="docker run -d --name glance --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 -p 9191:9191 -p 9292:9292 -v /tmp/openshaft/glance_data:/var/lib/glance openshaft/glance"
+alias openshaft_cinder="docker run -d --name cinder --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 -p 8776:8776 openshaft/cinder"
+alias openshaft_cinder-volume="docker run -d --name cinder-volume --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 --add-host nfs:172.17.0.1 openshaft/cinder-volume"
+alias openshaft_client="docker run -it --name client --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 openshaft/client"
+alias openshaft_neutron="docker run -d --name neutron --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 -p 9696:9696 openshaft/neutron"
+alias openshaft_neutron-agents="docker run --privileged -d --name neutron-agents --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 openshaft/neutron-agents"
+alias openshaft_nova="docker run -d --name nova --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 -p 6080:6080 -p 8773:8773 -p 8774:8774 -p 8775:8775 openshaft/nova"
+alias openshaft_clean="docker rm -f {glance,keystone,cinder,cinder-volume,nova,neutron,neutron-agents,rabbit,mysql,client}"
+alias openshaft_restart="docker stop {keystone,glance,cinder,cinder-volume,neutron,neutron-agents,nova}; docker start {keystone,glance,cinder,cinder-volume,neutron,neutron-agents,nova}"
+alias openshaft_heat="docker run -d --name heat --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 -p 8000:8000 -p 8003:8003 -p 8004:8004 openshaft/heat"
+alias openshaft_horizon="docker run -d --name horizon --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 -p 80:80 -p 443:443 openshaft/horizon"
+alias openshaft_nova-compute="docker run -d --privileged --name nova-compute --add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 --add-host nfs:172.17.0.1 -p 5900:5900 -p 5901:5901 -p 5902:5902 openshaft/nova-compute"
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi

@@ -10,5 +10,6 @@ openshaft:
     enable: false
  nets:
   - default
+  - default
 # ansible:
 #  - playbook: playbooks/centoskvm.yml
