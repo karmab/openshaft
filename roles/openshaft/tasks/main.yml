@@ -2,7 +2,6 @@
   tags:
    - sandbox
    - dbupgrader
-   - client
    - ceilometer
    - cinder
    - cinder-volume
@@ -20,10 +19,6 @@
    - nova-compute
    - swift
    - swift-storage
-
-- include: client.yml
-  tags:
-   - client
 
 - include: dbupgrader.yml
   tags:

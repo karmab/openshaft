@@ -2,11 +2,12 @@
 
 [![Build Status](https://travis-ci.org/karmab/openshaft.svg?branch=master)](https://travis-ci.org/karmab/openshaft)
 
-A set of roles to deploy openstack containers for each component. Plan to run this on openshift/kubernetes
+A set of roles to deploy openstack containers for each component. Plan to run this on *openshift/kubernetes*
 
 ## INITIALIZATION
 
 to tweak settings, create a *host_vars/localhost* file copying default configuration from *roles/openshat/default/main.yml* 
+
 you also want to export *ANSIBLE\_ROLES\_PATH* so that ansible can access the openshaft role
 
 ## BUILD ALL COMPONENT IMAGES
@@ -17,7 +18,7 @@ ansible-playbook playbooks/centos.yml
 
 ## BUILD SPECIFIC COMPONENT IMAGE
 
-You can use tagging for this. For instance, to only build keystone image,
+You can use tagging for this. For instance, to only build keystone image:
 
 ```
 ansible-playbook playbooks/centos.yml  -t keystone
@@ -64,9 +65,9 @@ If using an nfs cinder backend:
 ```
 docker run --privileged -d --name cinder-volume openshaft/cinder-volume
 ```
-If using a lvm backend, also add -v /dev:/dev and make sure to precreate a VG called cinder-volumes on the host
+If using a lvm backend, also add *-v /dev:/dev* and make sure to precreate a VG called cinder-volumes on the host
 
-for neutron openvswitch, make sure openvswitch is loaded on the host ( and selinux disabled) !!!
+for neutron openvswitch, make sure openvswitch is loaded on the host (and selinux disabled)
 
 ```
 docker run --privileged -d --name neutron-agents openshaft/neutron-agents
@@ -74,6 +75,7 @@ docker run --privileged -d --name neutron-agents openshaft/neutron-agents
 ## HANDLING EXTERNAL CONNECTIVIY WHEN TESTING ON DOCKER
 
 on the docker host
+
 ```
 brctl addbr external
 brctl addif external eth1
@@ -89,6 +91,7 @@ sysctl -p /etc/sysctl.conf
 ```
 
 on the neutron-agents container 
+
 ```
 ovs-vsctl add-port br-ex int
 ip link set int up
@@ -116,6 +119,7 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 - enable pushing to docker registry
 - improve documentation
 - make sure router information persists on the neutron-agents ?
+- remove iptables hack from nova api container
 
 ## Problems?
 

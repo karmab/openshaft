@@ -1588,7 +1588,7 @@ force_snat_range=0.0.0.0/0
 #     * metadata_port
 #  (string value)
 #metadata_host=$my_ip
-metadata_host=MYIP
+#metadata_host=MYIP
 #
 # This option determines the port used for the metadata API server.
 #
