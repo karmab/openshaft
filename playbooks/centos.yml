@@ -71,10 +71,6 @@
    - name: Enable Cinder Nfs Share
      command: exportfs -r
      when: cinder_exports.changed
-#   - name: Pull Mysql Image
-#     command: 'docker pull mysql'
-#   - name: Pull Rabbit Image
-#     command: 'docker pull rabbitmq:3-management'
    - name: Pull Mysql Image
      docker_image: name=mysql:latest
    - name: Pull Rabbit Image
