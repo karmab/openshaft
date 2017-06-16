@@ -102,10 +102,6 @@ ip link set br-ex up
 
 every image is built with bash and a keystonerc_admin you can use for testing
 
-```
-docker run --name client -it openshaft/client
-```
-
 ## FORCING REBUILD of a container
 
 ```
@@ -114,12 +110,10 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 
 ## TODO LIST
 
-- find out which detail change that prevents instances from booting now!!!!
 - create openshift templates for deployment
 - enable pushing to docker registry
 - improve documentation
 - make sure router information persists on the neutron-agents ?
-- remove iptables hack from nova api container
 
 ## Problems?
 

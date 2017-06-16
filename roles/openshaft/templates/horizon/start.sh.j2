@@ -1,4 +1,5 @@
 #!/usr/bin/bash
 
 # run command
-httpd -DFOREGROUND
+rm -rf /run/httpd/* /tmp/httpd*
+exec httpd -DFOREGROUND

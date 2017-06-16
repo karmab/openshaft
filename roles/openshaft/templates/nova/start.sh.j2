@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # bootstrap
-sed -i --follow-symlinks "s/MYIP/`hostname -I`/" /etc/nova/nova.conf
+sed -i --follow-symlinks "s/.*vncserver_proxyclient_address.*/vncserver_proxyclient_address = `hostname -I`/" /etc/nova/nova.conf
 mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "use {{ component }} ;"
 if [ "$?" != "0" ] ; then
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"

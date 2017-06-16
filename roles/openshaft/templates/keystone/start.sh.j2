@@ -10,4 +10,5 @@ if [ "$?" != "0" ] ; then
 fi
 
 # run command
-httpd -DFOREGROUND
+rm -rf /run/httpd/* /tmp/httpd*
+exec httpd -DFOREGROUND
