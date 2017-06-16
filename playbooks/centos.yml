@@ -28,6 +28,16 @@
       name: kvm_intel
       state: present
       params: nested=1
+   - name: Set Sysctl Entries 
+     sysctl:
+      name: "{{ item }}"
+      value: 0
+      sysctl_set: yes
+      state: present
+      reload: yes
+     with_items:
+     - net.ipv4.conf.all.rp_filter
+     - net.ipv4.conf.default.rp_filter
    - name: Install Packages
      package:
       name: "{{ item }}"
