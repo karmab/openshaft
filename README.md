@@ -42,7 +42,7 @@ also add this */etc/host entry* for local testing if on MacosX
 If running on linux, the indicated trick doesnt work, instead you ll want to append the following to your docker run commands
 
 ```
---add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host swift:172.17.0.1 --add-host nfs:172.17.0.1
+--add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host nfs:172.17.0.1
 ```
 
 
@@ -55,7 +55,8 @@ docker run -d --name cinder -p 8776:8776 openshaft/cinder
 docker run -d --name neutron -p 9696:9696 openshaft/neutron
 docker run -d --name nova -p 6080:6080 -p 8773:8773 -p 8774:8774 -p 8775:8775 openshaft/nova
 docker run -d --name heat -p 8000:8000 -p 8003:8003 -p 8004:8004 openshaft/heata
-docker run -d --name keystone -p 80:80 -p 443:443 openshaft/horizon
+docker run -d --name horizon -p 80:80 -p 443:443 openshaft/horizon
+docker run -d --name swift -p 8080:8080 openshaft/swift
 ```
 
 ## RUN PRIVILEGED CONTAINERS
@@ -72,6 +73,12 @@ for neutron openvswitch, make sure openvswitch is loaded on the host (and selinu
 ```
 docker run --privileged -d --name neutron-agents openshaft/neutron-agents
 ```
+
+
+```
+docker run --privileged -v /dev/vdb:/dev/vdb -d --name swift-storage -p 6200:6200 -p 6201:6201 -p 6202:6202 openshaft/swift-storage"
+```
+
 ## HANDLING EXTERNAL CONNECTIVIY WHEN TESTING ON DOCKER
 
 on the docker host
@@ -112,7 +119,6 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 
 - create openshift templates for deployment
 - enable pushing to docker registry
-- improve documentation
 - make sure router information persists on the neutron-agents ?
 
 ## Problems?
