@@ -1,0 +1,27 @@
+#!/usr/bin/bash
+
+source /keystonerc_admin
+openstack project create --description "Service Project" services
+openstack service create  --name cinder --description "Swift Object Service" object-store
+openstack endpoint create --region {{ common.region }} --publicurl '{{ swift_public_url }}' --internalurl '{{ swift_internal_url }}' --adminurl '{{ swift_admin_url }}' object-store
+openstack user create --password {{ swift.password }} swift
+openstack role add --project services --user swift admin
+
+# run command
+
+{% for item in ['object','account','container'] %} 
+    swift-ring-builder /etc/swift/{{ item }}.builder create {{ swift_partition }} {{ swift_replicas }} 1
+{% endfor %}
+
+{% for item in swift.storage_nodes.values() %}
+    swift-ring-builder /etc/swift/object.builder add z1-{{ item.ip }}:6200/{{ item.devices.0 }} 100
+    swift-ring-builder /etc/swift/container.builder add z1-{{ item.ip }}:6201/{{ item.devices.0 }} 100
+    swift-ring-builder /etc/swift/account.builder add z1-{{ item.ip }}:6202/{{ item.devices.0 }} 100
+{% endfor %}
+
+{% for item in ['object','account','container'] %} 
+    swift-ring-builder /etc/swift/{{ item }}.builder rebalance
+{% endfor %}
+
+chown -R root.swift /etc/swift
+swift-proxy-server /etc/swift/proxy-server.conf  > /var/log/swift/proxy-server.log 2>&1

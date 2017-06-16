@@ -101,7 +101,7 @@
     swift_prefix: "{{ swift.prefix | default('ee83091ec3680190d215')}}"
     swift_suffix: "{{ swift.suffix | default('ee83091ec3680190d215')}}"
     swift_partition: "{{ swift.partition | default('16') }}"
-    swift_replicas: "{{ swift.replicas | default('3') }}"
+    swift_replicas: "{{ swift.replicas | default('1') }}"
     swift_storage_nodes: "{{ swift.storage_nodes | default(['127.0.0.1']) }}"
     aodh_public_url: "{{ aodh.public_url | default('http://' ~ aodh_host ~ ':8042') }}"
     aodh_internal_url: "{{ aodh.internal_url | default('http://' ~ aodh_host ~ ':8042') }}"

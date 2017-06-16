@@ -95,6 +95,7 @@ swift_storage_packages:
  - 'openstack-swift-object'
  - 'openstack-swift-container'
  - 'openstack-swift-account'
+ - 'xfsprogs'
 horizon_packages:
  - 'python-openstackclient'
  - 'httpd'

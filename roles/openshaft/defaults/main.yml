@@ -134,11 +134,12 @@ ceilometer:
 swift:
  username: swift
  password: swift
+ replicas: 1
  storage_nodes:
-  alice:
+  all:
    devices:
     - vdb
-   ip: 127.0.0.1
+   ip: 172.17.0.1
 
 horizon:
  ssl: false

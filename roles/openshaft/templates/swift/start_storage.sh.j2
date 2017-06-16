@@ -1,0 +1,37 @@
+#!/usr/bin/bash
+
+source /keystonerc_admin
+
+# run command
+
+{% if swift.storage_nodes['all'] is defined and swift.storage_nodes['all']['devices'] is defined %}
+{% for item in swift.storage_nodes['all']['devices']  %} 
+    mkdir -p /srv/node/{{ item }}
+    chown swift.swift /srv/node/{{ item }}
+    mkfs.{{ swift_fstype }} /dev/{{ item }} || true
+    mount -t {{ swift_fstype }} /dev/{{ item }} /srv/node/{{ item }}
+{% endfor %}
+{% endif %}
+
+{% for item in ['object','account','container'] %} 
+    swift-ring-builder /etc/swift/{{ item }}.builder create {{ swift_partition }} {{ swift_replicas }} 1
+{% endfor %}
+
+{% for item in swift.storage_nodes.values() %}
+    swift-ring-builder /etc/swift/object.builder add z1-{{ item.ip }}:6200/{{ item.devices.0 }} 100
+    swift-ring-builder /etc/swift/container.builder add z1-{{ item.ip }}:6201/{{ item.devices.0 }} 100
+    swift-ring-builder /etc/swift/account.builder add z1-{{ item.ip }}:6202/{{ item.devices.0 }} 100
+{% endfor %}
+
+{% for item in ['object','account','container'] %} 
+    swift-ring-builder /etc/swift/{{ item }}.builder rebalance
+{% endfor %}
+
+{% for item in ['object','account','container'] %} 
+    sed -i "s/bind_ip = .*/bind_ip = 0.0.0.0/" /etc/swift/{{ item }}-server.conf
+{% endfor %}
+
+chown -R swift.swift /srv/node/*
+swift-container-server /etc/swift/container-server.conf  > /var/log/swift/container-server.log 2>&1 &
+swift-account-server /etc/swift/account-server.conf  > /var/log/swift/account-server.log 2>&1 &
+swift-object-server /etc/swift/object-server.conf > /var/log/swift/object-server.log 2>&1 

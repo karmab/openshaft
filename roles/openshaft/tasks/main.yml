@@ -64,14 +64,13 @@
   tags:
    - horizon
 
-#
-#- include: swift.yml
-#  tags:
-#   - swift
-#
-#- include: swift-storage.yml
-#  tags:
-#   - swift-storage
+- include: swift.yml
+  tags:
+   - swift
+
+- include: swift-storage.yml
+  tags:
+   - swift-storage
 #
 #- include: ceilometer.yml
 #  tags:

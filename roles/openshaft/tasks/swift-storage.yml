@@ -1,0 +1,43 @@
+---
+
+- name: Set Swift Component
+  set_fact:
+    component: "swift-storage"
+
+- include: sandbox.yml
+
+- name: Set Swift Storage Prefix
+  set_fact:
+    rootdir: "{{ openshaft.rootdir }}/{{ component }}"
+    packages: "{{ swift_storage_packages }}"
+
+- name: Create Swift Rsync file
+  template:
+    src: swift/rsync
+    dest: "{{ openshaft.rootdir }}/{{ component }}/rsync"
+
+- name: Create Swift Rsyncd.conf file
+  template:
+    src: swift/rsyncd.conf
+    dest: "{{ openshaft.rootdir }}/{{ component }}/rsyncd.conf"
+
+- name: Create Swift.conf file
+  template:
+    src: swift/swift.conf
+    dest: "{{ openshaft.rootdir }}/{{ component }}/swift.conf"
+
+- name: Create Swift Storage Startfile
+  template:
+   src: "swift/start_storage.sh.j2"
+   dest: "{{ rootdir }}/start.sh"
+  register: start_file
+
+- name: Create Swift Storage Dockerfile
+  template:
+    src: "swift/Dockerfile_storage.j2"
+    dest: "{{ rootdir }}/Dockerfile"
+  register: dockerfile
+ 
+- name: Build Swift Storage Image
+  command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
+  when: start_file.changed or dockerfile.changed

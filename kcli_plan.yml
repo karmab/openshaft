@@ -4,6 +4,9 @@ openshaft:
  memory: 8192:x
  cpumodel: host-model
  reservehost: true
+ disks:
+  - size: 10
+  - size: 10
  cpuflags:
   - name: arat
     enable: false
