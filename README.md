@@ -69,9 +69,11 @@ docker run --privileged -d --name cinder-volume openshaft/cinder-volume
 If using a lvm backend, also add *-v /dev:/dev* and make sure to precreate a VG called cinder-volumes on the host
 
 for neutron openvswitch, make sure openvswitch is loaded on the host (and selinux disabled)
+for neutron agents, make sure to set a proper hostname to the container as routers are tagged with indicated hostname and only launched on corresponding l3 server
+Alternatively, you can enable l3 ha
 
 ```
-docker run --privileged -d --name neutron-agents openshaft/neutron-agents
+docker run --privileged -d --name neutron-agents --hostname neutron-agents openshaft/neutron-agents
 ```
 
 
@@ -119,7 +121,7 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 
 - create openshift templates for deployment
 - enable pushing to docker registry
-- make sure router information persists on the neutron-agents ?
+- evaluate use of net=host for openvswitch related containers
 
 ## Problems?
 

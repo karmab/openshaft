@@ -75,6 +75,7 @@
     neutron_type_drivers: "{{ neutron.type_drivers | default(['local,flat,vlan,gre,vxlan']) }}"
     neutron_mechanism_drivers: "{{ neutron.mechanism_drivers | default(['openvswitch']) }}"
 #    neutron_tunnel_ip: "{{ hostvars[inventory_hostname]['ansible_'+(neutron.tunnel_interface | default('eth0'))]['ipv4']['address'] }}"
+    neutron_l3_ha: "{{ neutron.l3_ha | default('False') }}"
     nova_public_url: "{{ nova.public_url | default('http://' ~ nova_host ~ ':8774/v2/%(tenant_id)s') }}"
     nova_internal_url: "{{ nova.internal_url | default('http://' ~ nova_host ~ ':8774/v2/%(tenant_id)s') }}"
     nova_url: "http://{{ nova_host }}:8774/v2"

@@ -85,6 +85,7 @@ neutron:
  interface_driver: neutron.agent.linux.interface.OVSInterfaceDriver
  external_network_bridge: ''
  service_metadata_proxy: true
+ l3_ha: false
 
 nova:
  dbuser: nova
