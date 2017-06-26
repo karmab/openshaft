@@ -1,0 +1,35 @@
+---
+
+- name: Create Registry Host entry
+  lineinfile: 
+   dest: /etc/hosts
+   line: "{{ registry_ip}} {{ registry_url}}"
+   state: present
+  when: registry_ip is defined and registry_url is defined
+
+- name: Create Registry Directory
+  file:
+    path: "/etc/docker/certs.d/{{ registry_url }}"
+    state: directory
+
+- name: Create Registry Certificate
+  copy:
+    content: "{{ registry_certificate }}"
+    dest: "/etc/docker/certs.d/{{ registry_url }}/ca.crt"
+
+- name: Login Registry
+  command: "docker login https://{{ registry_url }} -u {{ registry_user }} -p {{ registry_token }}"
+  register: registry_loggedin
+  when: registry_loggedin is not defined
+
+#- name: Debug mode
+#  debug: var=prout
+
+- name: Tag Image
+  command: "docker tag openshaft/{{ component }} {{ registry_url }}/{{ registry_project }}/{{ component}}"
+  registry: image_tagged
+  when: registry_loggedin is defined
+
+- name: Tag Image
+  command: "docker push {{ registry_url }}/{{ registry_project }}/{{ component}}"
+  when: registry_loggedin is defined and image_tagged is defined

@@ -1,6 +1,8 @@
 registry_url: docker-registry-default.apps.karmalabs.local
+registry_project: openshaft
+registry_ip: 192.168.105.244
 registry_user: karim
-registry_token: xxx
+registry_token: cVdT_4zjDqFlwoRkDM1hGuPZhQW5_L0xoaDUAwIJS_w
 registry_certificate: | 
   -----BEGIN CERTIFICATE-----
   MIIDaTCCAlGgAwIBAgIBGTANBgkqhkiG9w0BAQsFADAmMSQwIgYDVQQDDBtvcGVu
