@@ -1,0 +1,83 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: keystone
+    name: keystone
+  spec:
+    replicas: 1
+    selector:
+      app: keystone
+      deploymentconfig: keystone
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: keystone
+          deploymentconfig: keystone
+      spec:
+        containers:
+        - image: keystone:latest
+          name: keystone
+          ports:
+          - containerPort: 35357
+            protocol: TCP
+          - containerPort: 5000
+            protocol: TCP
+          resources: {}
+        serviceAccount: sa-anyuid
+        serviceAccountName: sa-anyuid
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - keystone
+        from:
+          kind: ImageStreamTag
+          name: keystone:latest
+          namespace: openshaft
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: keystone
+    name: keystone
+  spec:
+    ports:
+    - name: 5000-tcp
+      port: 5000
+      protocol: TCP
+      targetPort: 5000
+    - name: 35357-tcp
+      port: 35357
+      protocol: TCP
+      targetPort: 35357
+    selector:
+      app: keystone
+      deploymentconfig: keystone
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

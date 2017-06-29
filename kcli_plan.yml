@@ -1,7 +1,7 @@
 openshaft:
  template: CentOS-7-x86_64-GenericCloud.qcow2
  numcpus: 2
- memory: 8192:x
+ memory: 8192
  cpumodel: host-model
  reservehost: true
  disks:
@@ -17,3 +17,20 @@ openshaft:
   - default
 # ansible:
 #  - playbook: playbooks/centoskvm.yml
+#
+
+openshaft:
+ type: dns
+ net: default
+ ip: 172.17.0.1
+ alias:
+  - controller
+  - mysql
+  - rabbit
+  - glance
+  - cinder
+  - neutron
+  - nova
+  - heat
+  - ceilometer
+  - swift

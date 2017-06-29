@@ -59,3 +59,7 @@
 - name: Build Dbupgrader Image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
   when: dockerfile.changed or configure_cinder.changed
+
+
+- include: openshift.yml
+  when: registry_url is defined and registry_certificate is defined and registry_project is defined

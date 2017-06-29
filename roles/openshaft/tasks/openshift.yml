@@ -27,7 +27,7 @@
 
 - name: Tag Image
   command: "docker tag openshaft/{{ component }} {{ registry_url }}/{{ registry_project }}/{{ component}}"
-  registry: image_tagged
+  register: image_tagged
   when: registry_loggedin is defined
 
 - name: Tag Image

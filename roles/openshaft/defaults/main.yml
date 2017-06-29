@@ -37,6 +37,7 @@ mysql:
   - magnum
 
 keystone:
+ host: keystone
  dbuser: keystone
  dbpassword: keystone
  dbname: keystone
@@ -45,6 +46,7 @@ keystone:
  version: v2.0
 
 glance:
+ host: glance
  dbuser: glance
  dbpassword: glance
  dbname: glance
@@ -57,6 +59,7 @@ glance:
   - glance.store.filesystem.Store
 
 cinder:
+ host: cinder
  dbuser: cinder
  dbpassword: cinder
  dbname: cinder
@@ -70,6 +73,7 @@ cinder:
  rpc_backend: cinder.openstack.common.rpc.impl_kombu
 
 neutron:
+ host: neutron
  dbuser: neutron
  dbpassword: neutron
  dbname: neutron
@@ -88,6 +92,7 @@ neutron:
  l3_ha: false
 
 nova:
+ host: nova
  dbuser: nova
  dbpassword: nova
  dbname: nova
@@ -112,6 +117,7 @@ nova_api:
  dbname: nova_api
 
 heat:
+ host: heat
  dbuser: heat
  dbpassword: heat
  dbname: heat
@@ -122,6 +128,7 @@ heat:
  auth_encryption_key: cb2e83de82444488
 
 ceilometer:
+ host: ceilometer
  dbuser: ceilometer
  dbpassword: ceilometer
  dbname: ceilometer
@@ -133,6 +140,7 @@ ceilometer:
  redis: false
 
 swift:
+ host: swift
  username: swift
  password: swift
  replicas: 1
@@ -157,6 +165,7 @@ redis:
  x: false
 
 designate:
+ host: designate
  dbuser: designate
  dbpassword: designate
  dbname: designate
@@ -185,6 +194,7 @@ designate_pool_manager:
  dbname: designate_pool_manager
 
 magnum:
+ host: magnum
  dbuser: magnum
  dbpassword: magnum
  dbname: magnum
@@ -193,6 +203,7 @@ magnum:
  cert_manager_type: local
 
 barbican:
+ host: barbican
  dbuser: barbican
  dbpassword: barbican
  dbname: barbican

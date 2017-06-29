@@ -1,0 +1,95 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: nova
+    name: nova
+  spec:
+    replicas: 1
+    selector:
+      app: nova
+      deploymentconfig: nova
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: nova
+          deploymentconfig: nova
+      spec:
+        containers:
+        - image: nova:latest
+          name: nova
+          ports:
+          - containerPort: 8774
+            protocol: TCP
+          - containerPort: 8775
+            protocol: TCP
+          - containerPort: 6080
+            protocol: TCP
+          - containerPort: 8773
+            protocol: TCP
+          resources: {}
+        serviceAccount: sa-anyuid
+        serviceAccountName: sa-anyuid
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - nova
+        from:
+          kind: ImageStreamTag
+          name: nova:latest
+          namespace: openshaft
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: nova
+    name: nova
+  spec:
+    ports:
+    - name: 6080-tcp
+      port: 6080
+      protocol: TCP
+      targetPort: 6080
+    - name: 8773-tcp
+      port: 8773
+      protocol: TCP
+      targetPort: 8773
+    - name: 8774-tcp
+      port: 8774
+      protocol: TCP
+      targetPort: 8774
+    - name: 8775-tcp
+      port: 8775
+      protocol: TCP
+      targetPort: 8775
+    selector:
+      app: nova
+      deploymentconfig: nova
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

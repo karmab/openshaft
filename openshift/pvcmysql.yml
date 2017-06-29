@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvcmysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi

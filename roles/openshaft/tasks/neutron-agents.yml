@@ -67,3 +67,6 @@
 - name: Build Neutron Agents Image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}"
   when: configure_neutron_agents.changed or configure_neutron_agents_ovs.changed or configure_neutron_agents_dhcp.changed or configure_neutron_agents_dhcp_dnsmasq.changed or configure_neutron_agents_l3.changed or configure_neutron_agents_l3_metadata.changed or start_file.changed or dockerfile.changed
+
+- include: openshift.yml
+  when: registry_url is defined and registry_certificate is defined and registry_project is defined

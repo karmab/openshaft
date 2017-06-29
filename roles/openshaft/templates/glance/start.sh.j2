@@ -2,7 +2,9 @@
 
 # bootstrap
 mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "use {{ component }} ;"
-if [ "$?" != "0" ] ; then
+EXIST="$?"
+TABLES=`mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -s --skip-column-names -e "SELECT COUNT(DISTINCT table_name) FROM information_schema.columns WHERE table_schema = '{{ component }}' ;"`
+if [ "$EXIST" != "0" ] || [ "$TABLES" == "0" ] ; then
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "create database {{ component }} ;"
   mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "GRANT ALL PRIVILEGES ON {{ component }}.* TO '{{ vars[component]['dbuser'] }}'@'%' identified by '{{ vars[component]['dbpassword'] }}' ;"
   su - glance -s /bin/bash -c 'glance-manage db_sync'
