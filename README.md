@@ -94,6 +94,10 @@ docker run --privileged -d --name neutron-agents --hostname neutron-agents opens
 ```
 
 ```
+docker run --privileged -d --name nova-compute openshaft/nova-compute
+```
+
+```
 docker run --privileged -v /dev/vdb:/dev/vdb -d --name swift-storage -p 6200:6200 -p 6201:6201 -p 6202:6202 openshaft/swift-storage"
 ```
 

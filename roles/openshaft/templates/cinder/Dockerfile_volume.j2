@@ -1,4 +1,4 @@
-FROM centos:7
+FROM {{ openshaft.image }}
 MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
 
 RUN yum -y install centos-release-openstack-{{ common.version }} && yum -y install mariadb nfs-utils {{ packages | join (' ') }} && yum clean all

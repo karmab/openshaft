@@ -1,0 +1,56 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: nova-compute
+    name: nova-compute
+  spec:
+    replicas: 1
+    selector:
+      app: nova-compute
+      deploymentconfig: nova-compute
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: nova-compute
+          deploymentconfig: nova-compute
+      spec:
+        containers:
+        - image: nova-compute:latest
+          name: nova-compute
+          resources: {}
+          securityContext: 
+            privileged: true
+        serviceAccount: sa-privileged
+        serviceAccountName: sa-privileged
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - nova-compute
+        from:
+          kind: ImageStreamTag
+          name: nova-compute:latest
+          namespace: openshaft
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+kind: List
+metadata: {}
