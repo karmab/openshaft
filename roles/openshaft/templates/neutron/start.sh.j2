@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+{% if neutron_core_plugin == 'ml2' %}
+ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
+{% endif %}
+ln -s /usr/share/neutron/api-paste.ini /etc/neutron/api-paste.ini
 # bootstrap
 mysql -h{{ common.mysql_host }} -u root -p{{ common.mysql_password }} -e "use {{ component }} ;"
 EXIST="$?"
@@ -17,8 +21,4 @@ if [ "$EXIST" != "0" ] || [ "$TABLES" == "0" ] ; then
 fi
 
 # run command
-{% if neutron_core_plugin == 'ml2' %}
-ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
-{% endif %}
-ln -s /usr/share/neutron/api-paste.ini /etc/neutron/api-paste.ini
 neutron-server --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini

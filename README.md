@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/karmab/openshaft.svg?branch=master)](https://travis-ci.org/karmab/openshaft)
 
-A set of roles to deploy openstack containers for each component. Plan to run this on *openshift/kubernetes*
+A set of roles to deploy openstack containers for each component.
+Same Containers to either run on single *docker* or  *openshift/kubernetes*
 
 ## INITIALIZATION
 
@@ -54,7 +55,7 @@ docker run -d --name glance -p 9191:9191 -p 9292:9292 -v /tmp/openshaft/glance_d
 docker run -d --name cinder -p 8776:8776 openshaft/cinder
 docker run -d --name neutron -p 9696:9696 openshaft/neutron
 docker run -d --name nova -p 6080:6080 -p 8773:8773 -p 8774:8774 -p 8775:8775 openshaft/nova
-docker run -d --name heat -p 8000:8000 -p 8003:8003 -p 8004:8004 openshaft/heata
+docker run -d --name heat -p 8000:8000 -p 8003:8003 -p 8004:8004 openshaft/heat
 docker run -d --name horizon -p 80:80 -p 443:443 openshaft/horizon
 docker run -d --name swift -p 8080:8080 openshaft/swift
 ```
@@ -118,8 +119,13 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 
 ## TODO LIST
 
-- create openshift templates for deployment
-- enable pushing to docker registry
+- create openshift templates for routes and service accounts
+- switch to stateful sets to name the neutron-agents deterministically
+- provide public_urls for service and corresponding route. test if impact on services
+- enable pushing to docker registry by mean of a service account
+- use ansible to gather openshift token and cert
+- create sample inventory for use with dedicated node for nova-compute and swift-storage
+- translate the veth pair in openshift world ( or use a cron on compute nodes to do the same?)
 - evaluate use of net=host for openvswitch related containers
 
 ## Problems?
