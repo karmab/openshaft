@@ -2,10 +2,26 @@
 
 [![Build Status](https://travis-ci.org/karmab/openshaft.svg?branch=master)](https://travis-ci.org/karmab/openshaft)
 
-A set of roles to deploy openstack containers for each component.
-Same Containers to either run on single *docker* or  *openshift/kubernetes*
+Ansible role to deploy custom openstack containers for each component and run on single *docker* or  *openshift/kubernetes*
+
+- keystone
+- glance
+- cinder
+- cinder-volume
+- neutron
+- neutron-agents
+- nova
+- nova-compute
+- heat
+- swift
+- swift-storage
+
 
 ## INITIALIZATION
+
+The idea is to use a dedicated vm to build containers and to optionally push them to openshift.
+You can also use this same machine to run all those containers
+
 
 to tweak settings, create a *host_vars/localhost* file copying default configuration from *roles/openshat/default/main.yml* 
 
@@ -127,6 +143,7 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 - create sample inventory for use with dedicated node for nova-compute and swift-storage
 - translate the veth pair in openshift world ( or use a cron on compute nodes to do the same?)
 - evaluate use of net=host for openvswitch related containers
+- test along with ovn and contiv
 
 ## Problems?
 
