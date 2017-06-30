@@ -127,6 +127,30 @@
     mysql_prefix: "mysql+pymysql"
   when: version != 'kilo'
 
+- name: Set Protocol When Using Openshift
+  set_fact:
+    openshift_protocol: "{{  openshift_protocol | default('http') }}"
+  when: openshift_domain is defined
+
+- name: Set Public Urls When Using Openshift
+  set_fact:
+    keystone_public_url: "{{ keystone.public_url | default(openshift_protocol ~ '://keystone-' ~ openshift_domain ~ '/' ~ keystone_version) }}"
+    glance_public_url: "{{ glance.public_url | default(openshift_protocol ~ '://glance-' ~ openshift_domain) }}"
+    cinder_public_url: "{{ cinder.public_url | default(openshift_protocol ~ '://cinder-' ~ openshift_domain ~ '/v1/%(tenant_id)s') }}"
+    cinderv2_public_url: "{{ cinder.public_url_v2 | default(openshift_protocol ~ '://cinder-' ~ openshift_domain ~ '/v2/%(tenant_id)s') }}"
+    neutron_public_url: "{{ neutron.public_url | default(openshift_protocol ~ '://neutron-' ~ openshift_domain) }}"
+    nova_public_url: "{{ nova.public_url | default(openshift_protocol ~ '://nova-' ~ openshift_domain ~ '/v2/%(tenant_id)s') }}"
+    novncproxy_url: "{{ nova.novncproxy_url | default(openshift_protocol ~ '://novanovnc-' ~ openshift_domain ~ '/vnc_auto.html') }}"
+    heat_public_url: "{{ heat.public_url | default(openshift_protocol ~ '://heat-' ~ openshift_domain ~ '/v1/%(tenant_id)s') }}"
+    heat_cfn_public_url: "{{ heat.public_url | default(openshift_protocol ~ '://heat-cfn-' ~ openshift_domain ~ '/v1') }}"
+    ceilometer_public_url: "{{ ceilometer.public_url | default(openshift_protocol ~ '://ceilometer-' ~ openshift_domain ) }}"
+    swift_public_url: "{{ swift.public_url | default(openshift_protocol ~ '://swift-' ~ openshift_domain ~ '/v1/AUTH_%(tenant_id)s') }}"
+    aodh_public_url: "{{ aodh.public_url | default(openshift_protocol ~ '://aodh-' ~ openshift_domain ) }}"
+    designate_public_url: "{{ designate.public_url | default(openshift_protocol ~ '://designate-' ~ openshift_domain ) }}"
+    magnum_public_url: "{{ magnum.public_url | default(openshift_protocol ~ '://magnum-' ~ openshift_domain ~ '/v1') }}"
+    barbican_public_url: "{{ barbican.public_url | default(openshift_protocol ~ '://barbican-' ~ openshift_domain ~ '/v1') }}"
+  when: openshift_domain is defined
+
 #- name: Debug Openstack Variables
 #  debug:
 #   var: hostvars[inventory_hostname]

@@ -1,14 +1,12 @@
-
-
 Sample files can be found in the [openshift directory](https://github.com/karmab/openshaft/tree/master/openshift)
 Note all the commands are associated to a previously created project called *openshaft*
-
 
 ## IMAGES
 
 images for every component need to be pushed to internal registry. the existing playbooks can upload to openshift, if the following variables are defined (*registry_ip* is optional) :
 
 ```
+openshift_domain: openshaft-apps.karmalabs.local
 registry_url: docker-registry-default.apps.karmalabs.local
 registry_project: openshaft
 registry_ip: 192.168.105.244
@@ -55,6 +53,7 @@ registry_certificate: |
   D5X4PX9V2KSJH1DYKZZmY0uTPkclZj1rS0QyIs81
   -----END CERTIFICATE-----
 ```
+
 Note i personally used nfs for docker-registry, handling permissions with the information available [here](https://access.redhat.com/solutions/2091541)
 
 ## PV and PVC
@@ -66,8 +65,8 @@ persistent volumes need to be created by the administrator for:
 
 the sample provided use nfs in both cases
 
-
 ## PERMISSIONS
+
 in the openshaft project, as standard user , we create specific service accounts
 
 ```
@@ -81,7 +80,6 @@ and add them to the corresponding scc
 oc adm policy add-scc-to-user anyuid system:serviceaccount:openshaft:sa-anyuid
 oc adm policy add-scc-to-user privileged system:serviceaccount:openshaft:sa-privileged
 ```
-
 
 ## CREATING DEPLOYMENT CONFIGS AND SERVICES
 
@@ -97,6 +95,8 @@ the resulting file was then edited so that it contains:
 - enabling privileged
 
 ## ROUTES
+
+the following routes need to be created for remote access. Note that the corresponding public_urls will automatically be configured in the Containers if properly defining openshift_domain ( which typically will be based on your current project and default domain for apps)
 
 ```
 oc expose service keystone -l name=keystone
