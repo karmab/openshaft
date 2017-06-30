@@ -93,6 +93,16 @@ Alternatively, you can enable l3 ha
 docker run --privileged -d --name neutron-agents --hostname neutron-agents openshaft/neutron-agents
 ```
 
+for nova-compute, you might need to start ( and enable) ip6tables service on host to prevent neutron errors when booting instance
+also under investigation, running the following in the container:
+
+```
+##chown root.kvm /dev/kvm
+chmod 666 /dev/kvm
+```
+
+
+
 ```
 docker run --privileged -d --name nova-compute openshaft/nova-compute
 ```

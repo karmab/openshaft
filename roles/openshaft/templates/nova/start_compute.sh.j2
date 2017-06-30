@@ -2,6 +2,7 @@
 
 # run command
 modprobe openvswitch bridge
+chmod 666 /dev/kvm
 echo 1 > /sys/net/ipv4/ip_forward
 echo 0 > /sys/net/ipv4/conf/all/rp_filter
 echo 0 > /sys/net/ipv4/conf/default/rp_filter

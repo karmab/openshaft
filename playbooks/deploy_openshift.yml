@@ -1,0 +1,13 @@
+---
+- name: Openshaft It!!!
+  hosts: openshaft
+  remote_user: centos
+  gather_facts: true
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+   - name: Include Openshift Task From Openshaft Role
+     include_role:
+      name: openshaft
+      tasks_from: openshift

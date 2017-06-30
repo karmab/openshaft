@@ -3,6 +3,7 @@
 Sample files can be found in the [openshift directory](https://github.com/karmab/openshaft/tree/master/openshift)
 Note all the commands are associated to a previously created project called *openshaft*
 
+
 ## IMAGES
 
 images for every component need to be pushed to internal registry. the existing playbooks can upload to openshift, if the following variables are defined (*registry_ip* is optional) :
@@ -54,6 +55,7 @@ registry_certificate: |
   D5X4PX9V2KSJH1DYKZZmY0uTPkclZj1rS0QyIs81
   -----END CERTIFICATE-----
 ```
+Note i personally used nfs for docker-registry, handling permissions with the information available [here](https://access.redhat.com/solutions/2091541)
 
 ## PV and PVC
 
@@ -97,5 +99,14 @@ the resulting file was then edited so that it contains:
 ## ROUTES
 
 ```
+oc expose service keystone -l name=keystone
+oc expose service keystone --name=keystone-admin --port=35357 -l name=keystone-admin
+oc expose service glance --port=9292 -l name=glance
+oc expose service cinder --port=8776 -l name=cinder
+oc expose service neutron -l name=neutron
+oc expose service nova --port=8774 -l name=nova
+oc expose service nova --name=novanovnc --port=6080 -l name=novanovnc
+oc expose service heat --port=8004 -l name=heat
+oc expose service heat --name=heat-cfn --port=8000 -l name=heat-cfn
 oc expose service horizon -l name=horizon
 ```
