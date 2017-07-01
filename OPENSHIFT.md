@@ -1,9 +1,13 @@
-Sample files can be found in the [openshift directory](https://github.com/karmab/openshaft/tree/master/openshift)
-Note all the commands are associated to a previously created project called *openshaft*
+
+Sample deployment configs can be found in the [openshift directory](https://github.com/karmab/openshaft/tree/master/openshift)
+
+Note that all the commands are associated to a previously created project called *openshaft*
 
 ## IMAGES
 
-images for every component need to be pushed to internal registry. the existing playbooks can upload to openshift, if the following variables are defined (*registry_ip* is optional) :
+images for every component need to be pushed to internal registry. 
+
+The existing playbooks get uploaded to openshift when the following variables are defined (*registry_ip* is optional) :
 
 ```
 openshift_domain: openshaft-apps.karmalabs.local
@@ -54,20 +58,20 @@ registry_certificate: |
   -----END CERTIFICATE-----
 ```
 
-Note i personally used nfs for docker-registry, handling permissions with the information available [here](https://access.redhat.com/solutions/2091541)
+I personally used nfs for docker-registry, handling permissions with the information available [here](https://access.redhat.com/solutions/2091541)
 
-## PV and PVC
+## PV
 
 persistent volumes need to be created by the administrator for:
 
 - mysql dir
-- glance images to be shared
+- glance images
 
 the sample provided use nfs in both cases
 
 ## PERMISSIONS
 
-in the openshaft project, as standard user , we create specific service accounts
+in the openshaft project, as standard user, we create specific service accounts
 
 ```
 oc create serviceaccount sa-anyuid
@@ -81,9 +85,9 @@ oc adm policy add-scc-to-user anyuid system:serviceaccount:openshaft:sa-anyuid
 oc adm policy add-scc-to-user privileged system:serviceaccount:openshaft:sa-privileged
 ```
 
-## CREATING DEPLOYMENT CONFIGS AND SERVICES
+## DEPLOYMENT CONFIGS AND SERVICES
 
-objects were mostly created using oc-newapp, redirecting it to a file
+objects were mostly created using oc newapp, redirecting output to a file with
 
 ```
 oc new-app --name=heat $COMPONENT:latest -o yaml > openshaft-$COMPONENT.yaml
@@ -96,7 +100,7 @@ the resulting file was then edited so that it contains:
 
 ## ROUTES
 
-the following routes need to be created for remote access. Note that the corresponding public_urls will automatically be configured in the Containers if properly defining openshift_domain ( which typically will be based on your current project and default domain for apps)
+the following routes need to be created for remote access. 
 
 ```
 oc expose service keystone -l name=keystone
@@ -111,3 +115,18 @@ oc expose service heat --name=heat-cfn --port=8000 -l name=heat-cfn
 oc expose service horizon -l name=horizon
 oc expose service swift -l name=swift
 ```
+
+The corresponding public\_urls will automatically be configured in keystone if properly defining openshift_domain ( which typically will be based on your current project and default domain for apps)
+
+So for instance, if you deploy in project *openshadt* and your default domain for app is *apps.karmalabs.local*, you get the following urls:
+
+- keystone-openshaft.apps.karmalabs.local
+- glance-openshaft.apps.karmalabs.local
+- cinder-openshaft.apps.karmalabs.local
+- neutron-openshaft.apps.karmalabs.local
+- nova-openshaft.apps.karmalabs.local
+- novanovnc-openshaft.apps.karmalabs.local
+- heat-openshaft.apps.karmalabs.local
+- heat-cfn-openshaft.apps.karmalabs.local
+- swift-openshaft.apps.karmalabs.local
+- horizon-openshaft.apps.karmalabs.local

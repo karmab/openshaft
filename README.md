@@ -152,6 +152,10 @@ every image is built with bash and a keystonerc_admin you can use for testing
 rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 ```
 
+## OPENSHIFT
+
+additional details for openshift can be found [here](https://github.com/karmab/openshaft/tree/master/OPENSHIFT.md)
+
 ## TODO LIST
 
 - create openshift templates for routes and service accounts
