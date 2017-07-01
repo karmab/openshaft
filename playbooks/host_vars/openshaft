@@ -3,7 +3,7 @@ registry_url: docker-registry-default.apps.karmalabs.local
 registry_project: openshaft
 registry_ip: 192.168.105.244
 registry_user: karim
-registry_token: alxPMWnjixmP8noRxBR9JWQ7GG9ro6R8EUiUDXqKsso
+registry_token: BWUIJ15IFTy5xSpzsvuc_3O_zgy7Ums1pl5-mA00XYs
 registry_certificate: | 
   -----BEGIN CERTIFICATE-----
   MIIDaTCCAlGgAwIBAgIBGTANBgkqhkiG9w0BAQsFADAmMSQwIgYDVQQDDBtvcGVu
@@ -44,3 +44,14 @@ registry_certificate: |
   aDcz0B8NFy8wbS9Y9O0TOW8n2xrGXbM4DQ1NBoEH8sgAxHvwleur81N1OVyvibr9
   D5X4PX9V2KSJH1DYKZZmY0uTPkclZj1rS0QyIs81
   -----END CERTIFICATE-----
+
+swift:
+ host: swift
+ username: swift
+ password: swift
+ replicas: 1
+ storage_nodes:
+  all:
+   devices:
+    - disk1
+   ip: 192.168.105.244

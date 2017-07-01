@@ -1,7 +1,7 @@
 FROM {{ openshaft.image }}
 MAINTAINER Karim Boumedhel <karimboumedhel@gmail.com>
 
-RUN yum -y install centos-release-openstack-{{ common.version }} && yum -y install mariadb {{ packages | join (' ') }} && yum clean all
+RUN {{ pkgrelease }} yum -y install mariadb {{ packages | join (' ') }} && yum clean all
 
 ADD     keystonerc_admin /
 ADD     keystonerc_admin_v3 /

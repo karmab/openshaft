@@ -6,6 +6,16 @@
     - '{{ ansible_os_family }}.yml'
     - default.yml
 
+- name: Set Pkg Variable When Not Centos
+  set_fact:
+    pkgrelease: ""
+  when: openshaft.image != 'centos:7'
+
+- name: Set Pkg Variable For Centos
+  set_fact:
+    pkgrelease: "yum -y install centos-release-openstack-{{ common.version }} &&"
+  when: openshaft.image == 'centos:7'
+
 - name: Set Hosts
   set_fact:
     keystone_host: "{{ [keystone.host, common.controller_host] | first_found | default('127.0.0.1') }}"

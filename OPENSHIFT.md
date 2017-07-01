@@ -109,4 +109,5 @@ oc expose service nova --name=novanovnc --port=6080 -l name=novanovnc
 oc expose service heat --port=8004 -l name=heat
 oc expose service heat --name=heat-cfn --port=8000 -l name=heat-cfn
 oc expose service horizon -l name=horizon
+oc expose service swift -l name=swift
 ```

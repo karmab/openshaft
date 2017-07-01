@@ -150,11 +150,10 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 ## TODO LIST
 
 - create openshift templates for routes and service accounts
-- switch to stateful sets to name the neutron-agents deterministically
-- provide public_urls for service and corresponding route. test if impact on services
+- switch to stateful sets to name the neutron-agents deterministically ?
 - enable pushing to docker registry by mean of a service account
 - use ansible to gather openshift token and cert
-- create sample inventory for use with dedicated node for nova-compute and swift-storage
+- add labels to schedule nova-compute or swift-storage on specific nodes
 - translate the veth pair in openshift world ( or use a cron on compute nodes to do the same?)
 - evaluate use of net=host for openvswitch related containers
 - test along with ovn and contiv

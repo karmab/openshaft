@@ -1,0 +1,101 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: swift-storage
+    name: swift-storage
+  spec:
+    replicas: 1
+    selector:
+      app: swift-storage
+      deploymentconfig: swift-storage
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: swift-storage
+          deploymentconfig: swift-storage
+      spec:
+        containers:
+        - image: openshaft/swift-storage:latest
+          name: swift-storage
+          ports:
+          - containerPort: 6200
+            hostPort: 6200
+            protocol: TCP
+          - containerPort: 6201
+            hostPort: 6201
+            protocol: TCP
+          - containerPort: 6202
+            hostPort: 6202
+            protocol: TCP
+          resources: {}
+          volumeMounts:
+           - mountPath: /dev/disk1
+             name: disk1
+          securityContext:
+            privileged: true
+        volumes:
+         - name: disk1
+           hostPath:
+            path: /dev/vdc
+        serviceAccount: sa-privileged
+        serviceAccountName: sa-privileged
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - swift-storage
+        from:
+          kind: ImageStreamTag
+          name: swift-storage:latest
+          namespace: openshaft
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: swift-storage
+    name: swift-storage
+  spec:
+    ports:
+    - name: 6200-tcp
+      port: 6200
+      protocol: TCP
+      targetPort: 6200
+    - name: 6201-tcp
+      port: 6201
+      protocol: TCP
+      targetPort: 6201
+    - name: 6202-tcp
+      port: 6202
+      protocol: TCP
+      targetPort: 6202
+    selector:
+      app: swift-storage
+      deploymentconfig: swift-storage
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

@@ -2,7 +2,7 @@
 
 source /keystonerc_admin
 openstack project create --description "Service Project" services
-openstack service create  --name cinder --description "Swift Object Service" object-store
+openstack service create  --name swift --description "Swift Object Service" object-store
 openstack endpoint create --region {{ common.region }} --publicurl '{{ swift_public_url }}' --internalurl '{{ swift_internal_url }}' --adminurl '{{ swift_admin_url }}' object-store
 openstack user create --password {{ swift.password }} swift
 openstack role add --project services --user swift admin
