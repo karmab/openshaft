@@ -16,8 +16,13 @@ Ansible role to deploy custom openstack containers for each component and run on
 - swift
 - swift-storage
 
+## COOL SCREENSHOTS
 
-## INITIALIZATION
+![Screenshot1](screen1.png)
+
+![Screenshot2](screen2.png)
+
+## INITIALISATION
 
 The idea is to use a dedicated vm to build containers and to optionally push them to openshift.
 You can also use this same machine to run all those containers
@@ -157,6 +162,7 @@ rm -rf $ROOTDIR/$COMPONENT/Dockerfile
 - translate the veth pair in openshift world ( or use a cron on compute nodes to do the same?)
 - evaluate use of net=host for openvswitch related containers
 - test along with ovn and contiv
+
 
 ## Problems?
 
