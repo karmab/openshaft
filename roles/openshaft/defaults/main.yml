@@ -8,9 +8,9 @@ common:
  version: newton
  tenant: services
  debug: true
- controller_host: controller
+ controller_host: keystone
  controller_hosts:
-  - controller
+  - keystone
  mysql_host: mysql
  mysql_password: mysql
  redis_host: redis

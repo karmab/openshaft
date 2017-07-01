@@ -58,13 +58,13 @@ docker run --name rabbit -p 5672:5672 -d --hostname rabbit -e RABBITMQ_DEFAULT_U
 also add this */etc/host entry* for local testing if on MacosX
 
 ```
-172.17.0.1 mysql controller rabbit rabbitmq glance cinder neutron nova heat ceilometer swift
+172.17.0.1 mysql keystone rabbit rabbitmq glance cinder neutron nova heat ceilometer swift
 ```
 
 If running on linux, the indicated trick doesnt work, instead you ll want to append the following to your docker run commands
 
 ```
---add-host mysql:172.17.0.1 --add-host controller:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host nfs:172.17.0.1
+--add-host mysql:172.17.0.1 --add-host keystone:172.17.0.1 --add-host rabbit:172.17.0.1 --add-host glance:172.17.0.1 --add-host cinder:172.17.0.1 --add-host neutron:172.17.0.1 --add-host nova:172.17.0.1 --add-host heat:172.17.0.1 --add-host ceilometer:172.17.0.1 --add-host nfs:172.17.0.1
 ```
 
 
