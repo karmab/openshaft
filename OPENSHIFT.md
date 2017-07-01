@@ -1,6 +1,13 @@
 
 Sample deployment configs can be found in the [openshift directory](https://github.com/karmab/openshaft/tree/master/openshift)
 
+You should deploy in the following order :
+
+- mysql and rabbit 
+- keystone
+- then the other services
+
+
 Note that all the commands are associated to a previously created project called *openshaft*
 
 ## IMAGES

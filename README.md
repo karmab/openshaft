@@ -15,6 +15,7 @@ Ansible role to deploy custom openstack containers for each component and run on
 - heat
 - swift
 - swift-storage
+- db-upgrader ( if willing to run updates)
 
 ## COOL SCREENSHOTS
 
@@ -166,6 +167,7 @@ additional details for openshift can be found [here](https://github.com/karmab/o
 - translate the veth pair in openshift world ( or use a cron on compute nodes to do the same?)
 - evaluate use of net=host for openvswitch related containers
 - test along with ovn and contiv
+- review if it makes sense to push images to docker hub
 
 
 ## Problems?
