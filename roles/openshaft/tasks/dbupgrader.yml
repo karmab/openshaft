@@ -62,4 +62,4 @@
 
 
 - include: openshift.yml
-  when: registry_url is defined and registry_certificate is defined and registry_project is defined
+  when: registry_url is defined and registry_certificate is defined and openshift_project is defined

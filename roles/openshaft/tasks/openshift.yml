@@ -18,7 +18,7 @@
     dest: "/etc/docker/certs.d/{{ registry_url }}/ca.crt"
 
 - name: Download Oc Client
-  command: "wget -O /root/oc.tar.gz {{ openshaft.oc_client | default('https://github.com/openshift/origin/releases/download/v1.5.1/openshift-origin-client-tools-v1.5.1-7b451fc-linux-64bit.tar.gz' }}"
+  command: "wget -O /root/oc.tar.gz {{ openshaft.oc_client | default('https://github.com/openshift/origin/releases/download/v1.5.1/openshift-origin-client-tools-v1.5.1-7b451fc-linux-64bit.tar.gz') }}"
   args:
    creates: /root/oc.tar.gz
 
@@ -35,10 +35,6 @@
   command: "oc whoami -t"
   register: registry_token
   when: openshift_loggedin|succeeded
-
-- name: Debug This shit
-  debug:
-   var: registry_token
 
 - name: Login Registry
   command: "docker login https://{{ registry_url }} -u {{ openshift_user }} -p {{ registry_token.stdout }}"

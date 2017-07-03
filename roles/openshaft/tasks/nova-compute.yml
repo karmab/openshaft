@@ -61,4 +61,4 @@
   when: configure_neutron_agents.changed or configure_neutron_agents_ovs.changed or configure_nova_compute.changed or start_file.changed or dockerfile.changed
 
 - include: openshift.yml
-  when: registry_url is defined and registry_certificate is defined and registry_project is defined
+  when: registry_url is defined and registry_certificate is defined and openshift_project is defined

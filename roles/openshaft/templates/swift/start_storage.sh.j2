@@ -2,33 +2,31 @@
 
 source /keystonerc_admin
 
-# run command
-
-{% if swift.storage_nodes['all'] is defined and swift.storage_nodes['all']['devices'] is defined %}
-{% for item in swift.storage_nodes['all']['devices']  %} 
-    mkdir -p /srv/node/{{ item }}
-    chown swift.swift /srv/node/{{ item }}
-    mkfs.{{ swift_fstype }} /dev/{{ item }} || true
-    mount -t {{ swift_fstype }} /dev/{{ item }} /srv/node/{{ item }}
-{% endfor %}
-{% endif %}
-
-{% for item in ['object','account','container'] %} 
-    swift-ring-builder /etc/swift/{{ item }}.builder create {{ swift_partition }} {{ swift_replicas }} 1
-{% endfor %}
-
-{% for item in swift.storage_nodes.values() %}
-    swift-ring-builder /etc/swift/object.builder add z1-{{ item.ip }}:6200/{{ item.devices.0 }} 100
-    swift-ring-builder /etc/swift/container.builder add z1-{{ item.ip }}:6201/{{ item.devices.0 }} 100
-    swift-ring-builder /etc/swift/account.builder add z1-{{ item.ip }}:6202/{{ item.devices.0 }} 100
+{% for item in swift.devices  %} 
+mkdir -p /srv/node/{{ item }}
+chown swift.swift /srv/node/{{ item }}
+mkfs.{{ swift_fstype }} /dev/{{ item }} || true
+mount -t {{ swift_fstype }} /dev/{{ item }} /srv/node/{{ item }}
 {% endfor %}
 
 {% for item in ['object','account','container'] %} 
-    swift-ring-builder /etc/swift/{{ item }}.builder rebalance
+swift-ring-builder /etc/swift/{{ item }}.builder create {{ swift_partition }} {{ swift_replicas }} 1
+{% endfor %}
+
+{% for ip in swift.ips %}
+{% for device in swift.devices %}
+swift-ring-builder /etc/swift/object.builder add z1-{{ ip }}:6200/{{ device }} 100
+swift-ring-builder /etc/swift/container.builder add z1-{{ ip }}:6201/{{ device }} 100
+swift-ring-builder /etc/swift/account.builder add z1-{{ ip }}:6202/{{ device }} 100
+{% endfor %}
 {% endfor %}
 
 {% for item in ['object','account','container'] %} 
-    sed -i "s/bind_ip = .*/bind_ip = 0.0.0.0/" /etc/swift/{{ item }}-server.conf
+swift-ring-builder /etc/swift/{{ item }}.builder rebalance
+{% endfor %}
+
+{% for item in ['object','account','container'] %} 
+sed -i "s/bind_ip = .*/bind_ip = 0.0.0.0/" /etc/swift/{{ item }}-server.conf
 {% endfor %}
 
 chown -R swift.swift /srv/node/*
