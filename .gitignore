@@ -2,6 +2,8 @@
 *pyc
 *retry
 *old
+*.key
+*.key.pub
 
 # VEnv
 .virtualenv
