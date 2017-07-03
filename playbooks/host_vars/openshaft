@@ -1,9 +1,10 @@
 openshift_domain: openshaft.apps.karmalabs.local
+openshift_host: 192.168.105.98
+openshift_user: karim
+openshift_password: karim
+openshift_project: openshaft
 registry_url: docker-registry-default.apps.karmalabs.local
-registry_project: openshaft
 registry_ip: 192.168.105.244
-registry_user: karim
-registry_token: BWUIJ15IFTy5xSpzsvuc_3O_zgy7Ums1pl5-mA00XYs
 registry_certificate: | 
   -----BEGIN CERTIFICATE-----
   MIIDaTCCAlGgAwIBAgIBGTANBgkqhkiG9w0BAQsFADAmMSQwIgYDVQQDDBtvcGVu

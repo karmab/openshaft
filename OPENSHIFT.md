@@ -21,8 +21,8 @@ openshift_domain: openshaft-apps.karmalabs.local
 registry_url: docker-registry-default.apps.karmalabs.local
 registry_project: openshaft
 registry_ip: 192.168.105.244
-registry_user: karim
-registry_token: nLpl4D7KmhPe3Jr77QkAPnLRqlLD2g6cHfVjgMr3yis
+openshift_user: karim
+openshift_password: karim
 registry_certificate: |
   -----BEGIN CERTIFICATE-----
   MIIDaTCCAlGgAwIBAgIBGTANBgkqhkiG9w0BAQsFADAmMSQwIgYDVQQDDBtvcGVu
@@ -83,6 +83,7 @@ in the openshaft project, as standard user, we create specific service accounts
 ```
 oc create serviceaccount sa-anyuid
 oc create serviceaccount sa-privileged
+oc create serviceaccount sa-hostnetwork
 ```
 
 and add them to the corresponding scc
@@ -90,6 +91,7 @@ and add them to the corresponding scc
 ```
 oc adm policy add-scc-to-user anyuid system:serviceaccount:openshaft:sa-anyuid
 oc adm policy add-scc-to-user privileged system:serviceaccount:openshaft:sa-privileged
+oc adm policy add-scc-to-user hostnetwork system:serviceaccount:openshaft:sa-hostnetwork
 ```
 
 ## DEPLOYMENT CONFIGS AND SERVICES
