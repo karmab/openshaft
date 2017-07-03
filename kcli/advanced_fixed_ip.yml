@@ -1,0 +1,146 @@
+karmalabs.local:
+ type: network
+ cidr: 192.168.105.0/24
+ dhcp: True
+
+master:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 6144
+ reservedns: true
+ sharedkey: true
+ domain: karmalabs.local
+ dns: karmalabs.local
+ nets:
+  - name: karmalabs.local
+    ip: 192.168.105.10
+    mask: 255.255.255.0
+    gateway: 192.168.105.1
+    dns: 192.168.105.1
+ disks:
+  - size: 10
+  - size: 30
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/nfs.sh
+  - advanced/pre.sh
+ files:
+  - path: /root/hosts
+    origin: advanced/hosts
+  - path: /root/install.sh
+    origin: advanced/install.sh
+    mode: 700
+  - path: /root/pvregistry.yml
+    origin: advanced/pvregistry.yml
+  - path: /root/pvcregistry.yml
+    origin: advanced/pvcregistry.yml
+
+compute01:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 6144
+ reservedns: true
+ sharedkey: true
+ domain: karmalabs.local
+ dns: karmalabs.local
+ cpuflags:
+  - name: arat
+    enable: false
+  - name: clflushopt
+    enable: false
+ nets:
+  - name: karmalabs.local
+    ip: 192.168.105.11
+    mask: 255.255.255.0
+    gateway: 192.168.105.1
+    dns: 192.168.105.1
+  - name: default
+    noconf: true
+ disks:
+  - size: 10
+  - size: 30
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/pre.sh
+
+compute02:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 6144
+ reservedns: true
+ sharedkey: true
+ dns: karmalabs.local
+ domain: karmalabs.local
+ cpuflags:
+  - name: arat
+    enable: false
+  - name: clflushopt
+    enable: false
+ nets:
+  - name: karmalabs.local
+    ip: 192.168.105.12
+    mask: 255.255.255.0
+    gateway: 192.168.105.1
+    dns: 192.168.105.1
+  - name: default
+    noconf: true
+ disks:
+  - size: 10
+  - size: 30
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/pre.sh
+
+swift01:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 4096
+ reservedns: true
+ sharedkey: true
+ dns: karmalabs.local
+ domain: karmalabs.local
+ nets:
+  - name: karmalabs.local
+    ip: 192.168.105.13
+    mask: 255.255.255.0
+    gateway: 192.168.105.1
+    dns: 192.168.105.1
+ disks:
+  - size: 10
+  - size: 30
+  - size: 20
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/pre.sh
+
+swift02:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 4096
+ reservedns: true
+ sharedkey: true
+ dns: karmalabs.local
+ domain: karmalabs.local
+ nets:
+  - name: karmalabs.local
+    ip: 192.168.105.14
+    mask: 255.255.255.0
+    gateway: 192.168.105.1
+    dns: 192.168.105.1
+ disks:
+  - size: 10
+  - size: 30
+  - size: 20
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/pre.sh
