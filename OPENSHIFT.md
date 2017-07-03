@@ -67,6 +67,12 @@ registry_certificate: |
 
 I personally used nfs for docker-registry, handling permissions with the information available [here](https://access.redhat.com/solutions/2091541)
 
+```
+mkdir /registry
+chown nfsnobody:nfsnobody /registry
+chmod 777 /registry
+```
+
 ## PV
 
 persistent volumes need to be created by the administrator for:

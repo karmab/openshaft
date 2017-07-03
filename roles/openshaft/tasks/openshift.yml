@@ -28,10 +28,10 @@
    creates: /usr/bin/oc
 
 - name: Log In Openshift
-  command: "oc login {{ openshift_host }}:8443 -u {{ openshift_user }} -p {{ openshift_password }}"
+  command: "oc login --insecure-skip-tls-verify=true {{ openshift_host }}:8443 -u {{ openshift_user }} -p {{ openshift_password }}"
   register: openshift_loggedin
 
-- name: Log In Openshift
+- name: Grab Openshift Token
   command: "oc whoami -t"
   register: registry_token
   when: openshift_loggedin|succeeded
@@ -41,10 +41,10 @@
   register: registry_loggedin
   when: registry_token is defined
 
-- name: Tag Image
+- name: Tag Image For Openshift
   command: "docker tag openshaft/{{ component }} {{ registry_url }}/{{ openshift_project }}/{{ component}}"
   register: image_tagged
 
-- name: Tag Image
+- name: Push Image To Openshift
   command: "docker push {{ registry_url }}/{{ openshift_project }}/{{ component}}"
   when: registry_loggedin|succeeded and image_tagged|succeeded
