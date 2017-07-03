@@ -20,15 +20,16 @@ master:
  scripts: 
   - ~/register.sh
   - subscription.sh
-  - advanced/pre.sh
   - advanced/nfs.sh
-  - advanced/install1.sh
+  - advanced/pre.sh
  files:
   - path: /root/hosts
     origin: advanced/hosts
   - path: /root/install.sh
-    origin: advanced/install2.sh
+    origin: advanced/install.sh
     mode: 700
+  - path: /root/pvcregistry.yml
+    origin: advanced/pvcregistry.yml
 
 compute01:
  template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
@@ -45,7 +46,8 @@ compute01:
     enable: false
  nets:
   - karmalabs.local
-  - default
+  - name: default
+    noconf: true
  disks:
   - size: 10
   - size: 30
@@ -70,7 +72,8 @@ compute02:
     enable: false
  nets:
   - karmalabs.local
-  - default
+  - name: default
+    noconf: true
  disks:
   - size: 10
   - size: 30
