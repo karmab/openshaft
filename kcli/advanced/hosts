@@ -4,7 +4,6 @@
 [OSEv3:children]
 masters
 nodes
-etcd
 
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
@@ -22,9 +21,9 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 # openshift_master_cluster_hostname must resolve to the load balancer
 # or to one or all of the masters defined in the inventory if no load
 # balancer is present.
-openshift_master_cluster_method=native
-openshift_master_cluster_hostname=master.karmalabs.local
-openshift_master_cluster_public_hostname=master.karmalabs.local
+#openshift_master_cluster_method=native
+#openshift_master_cluster_hostname=master.karmalabs.local
+#openshift_master_cluster_public_hostname=master.karmalabs.local
 openshift_router_selector="region=infra"
 openshift_registry_selector="region=infra"
 os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
@@ -39,7 +38,7 @@ openshift_node_kubelet_args={'pods-per-core': ['10'], 'max-pods': ['250'], 'imag
 # enable ntp on masters to ensure proper failover
 openshift_clock_enabled=true
 
-openshift_hosted_metrics_deploy=false
+openshift_hosted_metrics_deploy=true
 openshift_master_default_subdomain=apps.karmalabs.local
 
 
@@ -57,8 +56,8 @@ master.karmalabs.local
 
 # host group for nodes, includes region info
 [nodes]
-master.karmalabs.local openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
-compute01.karmalabs.local openshift_node_labels="{'region': 'compute', 'zone': 'default'}"
-compute02.karmalabs.local openshift_node_labels="{'region': 'compute', 'zone': 'east'}"
-swift01.karmalabs.local openshift_node_labels="{'region': 'swift', 'zone': 'west'}"
-swift02.karmalabs.local openshift_node_labels="{'region': 'swift', 'zone': 'west'}"
+master.karmalabs.local openshift_node_labels="{'region': 'infra', 'zone': 'default'}" openshift_schedulable=true
+compute01.karmalabs.local openshift_node_labels="{'region': 'primary', 'zone': 'default', 'type': 'compute'}"
+compute02.karmalabs.local openshift_node_labels="{'region': 'primary', 'zone': 'east', 'type': 'compute'}"
+swift01.karmalabs.local openshift_node_labels="{'region': 'primary', 'zone': 'west', 'type': 'swift-storage'}"
+swift02.karmalabs.local openshift_node_labels="{'region': 'primary', 'zone': 'west', 'type': 'swift-storage'}"

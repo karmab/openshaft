@@ -21,12 +21,13 @@ master:
   - ~/register.sh
   - subscription.sh
   - advanced/pre.sh
+  - advanced/nfs.sh
   - advanced/install1.sh
  files:
   - path: /root/hosts
     origin: advanced/hosts
   - path: /root/install.sh
-    origin: advanced/install1.sh
+    origin: advanced/install2.sh
     mode: 700
 
 compute01:
