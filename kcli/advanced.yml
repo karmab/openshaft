@@ -44,6 +44,7 @@ compute01:
     enable: false
  nets:
   - karmalabs.local
+  - default
  disks:
   - size: 10
   - size: 30
@@ -68,6 +69,7 @@ compute02:
     enable: false
  nets:
   - karmalabs.local
+  - default
  disks:
   - size: 10
   - size: 30
