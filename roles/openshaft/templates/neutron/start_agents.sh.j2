@@ -6,14 +6,14 @@ ovs-vsctl add-br br-int
 ovs-vsctl add-br br-tun
 
 {% if neutron.bridge_mappings is defined %}
-{% for bridge in neutron.bridge_mappings.split(',') | map('regex_replace', '.*:(.*)', '\\1') | list %}
-ovs-vsctl add-br {{ bridge }}
+{% for bridge in neutron.bridge_mappings %}
+ovs-vsctl add-br {{ bridge | regex_replace('.*:(.*)', '\\1') }}
 {% endfor %}
 {% endif %}
 
 
 {% if neutron.bridge_ifaces is defined %}
-{% for bridge_iface in neutron.bridge_ifaces.split(',') %}
+{% for item in neutron.bridge_ifaces %}
 ovs-vsctl add-port {{ item | regex_replace('(.*):.*', '\\1') }} {{ item | regex_replace('.*:(.*)', '\\1') }}
 {% endfor %}
 {% endif %}

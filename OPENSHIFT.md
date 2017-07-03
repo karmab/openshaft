@@ -14,7 +14,7 @@ Note that all the commands are associated to a previously created project called
 
 images for every component need to be pushed to internal registry. 
 
-The existing playbooks get uploaded to openshift when the following variables are defined (*registry_ip* is optional) :
+The existing playbooks upload images to openshift integrated registry when the following variables are defined (*registry_ip* is optional) :
 
 ```
 openshift_domain: openshaft-apps.karmalabs.local
@@ -63,6 +63,12 @@ registry_certificate: |
   aDcz0B8NFy8wbS9Y9O0TOW8n2xrGXbM4DQ1NBoEH8sgAxHvwleur81N1OVyvibr9
   D5X4PX9V2KSJH1DYKZZmY0uTPkclZj1rS0QyIs81
   -----END CERTIFICATE-----
+```
+
+If you just want to push your existing images, you can use the following (specifying a single component)
+
+```
+ansible-playbook playbooks/deploy_openshift.yml -e component=cinder
 ```
 
 I personally used nfs for docker-registry, handling permissions with the information available [here](https://access.redhat.com/solutions/2091541)

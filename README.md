@@ -163,9 +163,11 @@ additional details for openshift can be found [here](https://github.com/karmab/o
 - use ansible to gather openshift token and cert
 - add labels to schedule nova-compute or swift-storage on specific nodes
 - translate the veth pair in openshift world ( or use a cron on compute nodes to do the same?)
+- add missing ifaces to bridge so they get added by namespace later or only detected ones ?
 - evaluate use of net=host for openvswitch related containers
 - test along with ovn and contiv
 - review if it makes sense to push images to docker hub
+- overwrite bridge mappings on a per compute ( or neutron-agent) base
 
 ## Problems?
 

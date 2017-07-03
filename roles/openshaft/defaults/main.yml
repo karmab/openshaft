@@ -80,7 +80,10 @@ neutron:
  dbname: neutron
  username: neutron
  password: neutron
- bridge_mappings: 'external:br-ex'
+ bridge_mappings:
+  - 'external:br-ex'
+ bridge_ifaces:
+  - 'br-ex:eth1'
  core_plugin: ml2
  tunnel_interface: eth0
  rpc_backend: neutron.openstack.common.rpc.impl_kombu
