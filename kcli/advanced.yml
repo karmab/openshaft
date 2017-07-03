@@ -1,0 +1,118 @@
+karmalabs.local:
+ type: network
+ cidr: 192.168.105.0/24
+ dhcp: True
+
+master:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 6144
+ reservedns: true
+ sharedkey: true
+ domain: karmalabs.local
+ dns: karmalabs.local
+ nets:
+  - karmalabs.local
+ disks:
+  - size: 10
+  - size: 30
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/pre.sh
+  - advanced/install1.sh
+ files:
+  - path: /root/hosts
+    origin: advanced/hosts
+  - path: /root/install.sh
+    origin: advanced/install1.sh
+    mode: 700
+
+compute01:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 6144
+ reservedns: true
+ sharedkey: true
+ domain: karmalabs.local
+ dns: karmalabs.local
+ cpuflags:
+  - name: arat
+    enable: false
+  - name: clflushopt
+    enable: false
+ nets:
+  - karmalabs.local
+ disks:
+  - size: 10
+  - size: 30
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/pre.sh
+
+compute02:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 6144
+ reservedns: true
+ sharedkey: true
+ dns: karmalabs.local
+ domain: karmalabs.local
+ cpuflags:
+  - name: arat
+    enable: false
+  - name: clflushopt
+    enable: false
+ nets:
+  - karmalabs.local
+ disks:
+  - size: 10
+  - size: 30
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/pre.sh
+
+swift01:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 4096
+ reservedns: true
+ sharedkey: true
+ dns: karmalabs.local
+ domain: karmalabs.local
+ nets:
+  - karmalabs.local
+ disks:
+  - size: 10
+  - size: 30
+  - size: 20
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/pre.sh
+
+swift02:
+ template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
+ numcpus: 2
+ memory: 4096
+ reservedns: true
+ sharedkey: true
+ dns: karmalabs.local
+ domain: karmalabs.local
+ nets:
+  - karmalabs.local
+ disks:
+  - size: 10
+  - size: 30
+  - size: 20
+ pool: default
+ scripts: 
+  - ~/register.sh
+  - subscription.sh
+  - advanced/pre.sh

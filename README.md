@@ -107,8 +107,6 @@ also under investigation, running the following in the container:
 chmod 666 /dev/kvm
 ```
 
-
-
 ```
 docker run --privileged -d --name nova-compute openshaft/nova-compute
 ```
@@ -168,7 +166,6 @@ additional details for openshift can be found [here](https://github.com/karmab/o
 - evaluate use of net=host for openvswitch related containers
 - test along with ovn and contiv
 - review if it makes sense to push images to docker hub
-
 
 ## Problems?
 
