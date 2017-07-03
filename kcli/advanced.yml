@@ -28,6 +28,8 @@ master:
   - path: /root/install.sh
     origin: advanced/install.sh
     mode: 700
+  - path: /root/pvregistry.yml
+    origin: advanced/pvregistry.yml
   - path: /root/pvcregistry.yml
     origin: advanced/pvcregistry.yml
 

@@ -8,3 +8,4 @@ exportfs -r
 systemctl start nfs ; systemctl enable nfs-server
 iptables -A INPUT -p tcp --dport 2049 -j ACCEPT
 service iptables save
+yum -y install screen
