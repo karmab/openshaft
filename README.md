@@ -168,6 +168,8 @@ additional details for openshift can be found [here](https://github.com/karmab/o
 - test along with ovn and contiv
 - review if it makes sense to push images to docker hub
 - overwrite bridge mappings on a per compute ( or neutron-agent) base
+- test with ocata and probably adjust some packages ( nova-placement-api )
+- use reasonable defaults for most existing variables to ease maintenance of the conf files
 
 ## Problems?
 

@@ -101,6 +101,7 @@ nova:
  dbpassword: nova
  dbname: nova
  api_dbname: nova_api
+ placement_dbname: nova_placement
  username: nova
  password: nova
  metadata_secret: changeme
@@ -119,6 +120,16 @@ nova_api:
  dbuser: nova
  dbpassword: nova
  dbname: nova_api
+
+nova_placement:
+ dbuser: nova
+ dbpassword: nova
+ dbname: nova_placement
+
+nova_cell0:
+ dbuser: nova
+ dbpassword: nova
+ dbname: nova_cell0
 
 heat:
  host: heat
