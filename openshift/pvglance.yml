@@ -9,5 +9,5 @@ spec:
     - ReadWriteOnce
     - ReadWriteMany
   nfs:
-    server: lb
+    server: master
     path: /glance

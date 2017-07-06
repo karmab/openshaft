@@ -20,6 +20,7 @@ items:
       metadata:
         annotations:
           openshift.io/generated-by: OpenShiftNewApp
+          openshift.io/node-selector: type=swift-storage
         creationTimestamp: null
         labels:
           app: swift-storage

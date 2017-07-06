@@ -4,10 +4,10 @@ metadata:
   name: pvmysql
 spec:
   capacity:
-    storage: 15Gi
+    storage: 20Gi
   accessModes:
     - ReadWriteOnce
     - ReadWriteMany
   nfs:
-    server: lb
+    server: master
     path: /mysql

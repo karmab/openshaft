@@ -149,3 +149,17 @@ So for instance, if you deploy in project *openshadt* and your default domain fo
 - heat-cfn-openshaft.apps.karmalabs.local
 - swift-openshaft.apps.karmalabs.local
 - horizon-openshaft.apps.karmalabs.local
+
+# TAGGING SERVICES TO SPECIFIC NODES
+
+
+For this matter, you can edit your deployment config metadata and add the proper annotations, provided you previously tag your nodes ( with type=nova-compute in this example)
+
+```
+template:
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/node-selector: type=nova-compute
+```
+
