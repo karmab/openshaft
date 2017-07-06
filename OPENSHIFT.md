@@ -95,7 +95,6 @@ in the openshaft project, as standard user, we create specific service accounts
 ```
 oc create serviceaccount sa-anyuid
 oc create serviceaccount sa-privileged
-oc create serviceaccount sa-hostnetwork
 ```
 
 and add them to the corresponding scc
@@ -103,7 +102,6 @@ and add them to the corresponding scc
 ```
 oc adm policy add-scc-to-user anyuid system:serviceaccount:openshaft:sa-anyuid
 oc adm policy add-scc-to-user privileged system:serviceaccount:openshaft:sa-privileged
-oc adm policy add-scc-to-user hostnetwork system:serviceaccount:openshaft:sa-hostnetwork
 ```
 
 ## DEPLOYMENT CONFIGS AND SERVICES
