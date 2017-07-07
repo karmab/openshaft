@@ -34,6 +34,8 @@ items:
             privileged: true
         serviceAccount: sa-privileged
         serviceAccountName: sa-privileged
+        nodeSelector:
+          type: nova-compute
     test: false
     triggers:
     - type: ConfigChange

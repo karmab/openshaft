@@ -58,6 +58,7 @@ compute01:
   - ~/register.sh
   - subscription.sh
   - advanced/pre.sh
+  - advanced/compute.sh
 
 compute02:
  template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
@@ -84,6 +85,7 @@ compute02:
   - ~/register.sh
   - subscription.sh
   - advanced/pre.sh
+  - advanced/compute.sh
 
 swift01:
  template: rhel-guest-image-7.2-20160302.0.x86_64.qcow2
