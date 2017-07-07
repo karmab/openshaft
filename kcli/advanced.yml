@@ -41,6 +41,7 @@ compute01:
  sharedkey: true
  domain: karmalabs.local
  dns: karmalabs.local
+ cpumodel: host-model
  cpuflags:
   - name: arat
     enable: false
@@ -68,6 +69,7 @@ compute02:
  sharedkey: true
  dns: karmalabs.local
  domain: karmalabs.local
+ cpumodel: host-model
  cpuflags:
   - name: arat
     enable: false
