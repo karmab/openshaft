@@ -157,6 +157,7 @@ additional details for openshift can be found [here](https://github.com/karmab/o
 
 ## TODO LIST
 
+- find root cause for this error on nova compute: *ERROR neutron.plugins.ml2.drivers.openvswitch.agent.ovs_neutron_agent ProcessExecutionError: Exit code: 255; Stdin: ; Stdout: ; Stderr: sysctl: cannot stat /proc/sys/net/bridge: No such file or directory*
 - create openshift templates for routes and service accounts
 - switch to stateful sets to name the neutron-agents deterministically ?
 - enable pushing to docker registry by mean of a service account

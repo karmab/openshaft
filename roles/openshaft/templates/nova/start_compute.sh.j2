@@ -3,6 +3,9 @@
 # run command
 modprobe openvswitch bridge
 chmod 666 /dev/kvm
+mkdir -p /var/lib/nova/instances
+# TODO find proper fix
+sed -i 's/self._enable_netfilter_for_bridges()/#self._enable_netfilter_for_bridges()/' /usr/lib/python2.7/site-packages/neutron/agent/linux/iptables_firewall.py
 echo 1 > /sys/net/ipv4/ip_forward
 echo 0 > /sys/net/ipv4/conf/all/rp_filter
 echo 0 > /sys/net/ipv4/conf/default/rp_filter
@@ -28,13 +31,13 @@ ovs-vsctl add-port {{ item | regex_replace('(.*):.*', '\\1') }} {{ item | regex_
 {% if version == 'kilo' and plugin_ini is not defined %}
 ln -s /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini /etc/neutron/plugin.ini
 sed -i --follow-symlinks "s/.*local_ip.*/local_ip = `hostname -I | awk -F' ' '{print $NF}'`/" /etc/neutron/plugin.ini
-neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/openvswitch_agent.ini >/var/log/neutron/neutron-openvswitch-agent.log  2>&1 &
+neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/openvswitch_agent.ini >/var/log/neutron/openvswitch-agent.log  2>&1 &
 {% endif %}
 
 {% if version != 'kilo' and plugin_ini is not defined %}
 ln -s /etc/neutron/plugins/ml2/openvswitch_agent.ini /etc/neutron/plugin.ini
 sed -i --follow-symlinks "s/.*local_ip.*/local_ip = `hostname -I | awk -F' ' '{print $NF}'`/" /etc/neutron/plugin.ini
-neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/openvswitch_agent.ini >/var/log/neutron/neutron-openvswitch-agent.log  2>&1 &
+neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/openvswitch_agent.ini >/var/log/neutron/openvswitch-agent.log  2>&1 &
 {% endif %}
 
 #nova compute
