@@ -64,7 +64,7 @@
   when: registry_loggedin|succeeded and image_tagged|succeeded
 
 - name: Create Config Map
-  shell: "oc delete configmap {{ item | regex_replace('_', '-') }} ; oc create configmap {{ item | regex_replace('_', '-') }} --from-file={{ rootdir }}/{{ item }}"
+  shell: "oc delete configmap {{ item | regex_replace('_', '-') }} ; oc create configmap {{ item | regex_replace('_', '-') }} --from-file={{ item | regex_replace('_', '-') }}={{ rootdir }}/{{ item }}"
   when: configfiles is defined and registry_loggedin|succeeded and image_tagged|succeeded
   with_items: "{{ configfiles }}"
   ignore_errors: yes
