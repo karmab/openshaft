@@ -3,8 +3,7 @@
 - name: Copy Openshift Deployment Configs
   copy:
     src: deploymentconfigs
-    dest: "{{ openshaft.rootdir }}/deploymentconfigs"
-    recursive: true
+    dest: "{{ openshaft.rootdir }}"
 
 - name: Create Registry Host entry
   lineinfile: 
