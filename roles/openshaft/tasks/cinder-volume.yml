@@ -22,6 +22,7 @@
     src: "cinder/nfs_shares.j2"
     dest: "{{ rootdir }}/nfs_shares"
   when: cinder.volume_driver == 'cinder.volume.drivers.nfs.NfsDriver' 
+  register: configure_nfs_shares
 
 - name: Create Cinder Volume Startfile
   template:
@@ -43,7 +44,7 @@
   set_fact:
     configfiles:
      - cinder.conf
-  when: configure_cinder.changed
+  when: configure_cinder.changed or configure_nfs_shares is defined
 
 - name: Add NFS Shares ConfigFile To Openshift Config Maps
   set_fact:
