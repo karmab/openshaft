@@ -1,5 +1,5 @@
 
-Sample deployment configs can be found in the [openshift directory](https://github.com/karmab/openshaft/tree/master/openshift)
+Sample deployment configs can be found in the [openshift directory](https://github.com/karmab/openshaft/tree/master/roles/openshaft/files/deploymentconfigs)
 
 You should deploy in the following order :
 

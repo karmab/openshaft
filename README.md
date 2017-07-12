@@ -29,7 +29,7 @@ The idea is to use a dedicated vm to build containers and to optionally push the
 You can also use this same machine to run all those containers
 
 
-to tweak settings, create a *host_vars/localhost* file copying default configuration from *roles/openshat/default/main.yml* 
+to tweak settings, create a *host_vars/localhost* file copying default configuration from *roles/openshaft/default/main.yml* 
 
 you also want to export *ANSIBLE\_ROLES\_PATH* so that ansible can access the openshaft role
 
@@ -100,12 +100,6 @@ docker run --privileged -d --name neutron-agents --hostname neutron-agents opens
 ```
 
 for nova-compute, you might need to start ( and enable) ip6tables service on host to prevent neutron errors when booting instance
-also under investigation, running the following in the container:
-
-```
-##chown root.kvm /dev/kvm
-chmod 666 /dev/kvm
-```
 
 ```
 docker run --privileged -d --name nova-compute openshaft/nova-compute
