@@ -3,7 +3,6 @@
 - name: Set Nova Compute Component
   set_fact:
     component: "nova-compute"
-
 - include: sandbox.yml
 
 - name: Set Nova Compute Prefix
@@ -59,6 +58,12 @@
 - name: Build Nova Compute Image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}"
   when: configure_neutron_agents.changed or configure_neutron_agents_ovs.changed or configure_nova_compute.changed or start_file.changed or dockerfile.changed
+
+- name: Set Nova Compute ConfigFiles For Openshift Config Maps
+  set_fact:
+    configfiles:
+     - nova.conf
+  when: configure_nova_compute.changed
 
 - include: openshift.yml
   when: registry_url is defined and registry_certificate is defined and openshift_project is defined

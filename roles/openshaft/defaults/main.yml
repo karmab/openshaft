@@ -70,7 +70,7 @@ cinder:
  nfs_shares_config: /etc/cinder/nfs_shares
  volume_driver: cinder.volume.drivers.nfs.NfsDriver
  nfs_shares:
-  - master:/cinder
+  - origin:/cinder
  rpc_backend: cinder.openstack.common.rpc.impl_kombu
 
 neutron:

@@ -68,5 +68,15 @@
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}"
   when: configure_neutron_agents.changed or configure_neutron_agents_ovs.changed or configure_neutron_agents_dhcp.changed or configure_neutron_agents_dhcp_dnsmasq.changed or configure_neutron_agents_l3.changed or configure_neutron_agents_l3_metadata.changed or start_file.changed or dockerfile.changed
 
+- name: Set Keystone ConfigFiles For Openshift Config Maps
+  set_fact:
+    configfiles:
+     - neutron.conf
+     - plugin.ini
+     - dhcp_agent.ini
+#     - l3_agent.ini
+#     - metadata_agent.ini
+  when: configure_neutron_agents.changed
+
 - include: openshift.yml
   when: registry_url is defined and registry_certificate is defined and openshift_project is defined

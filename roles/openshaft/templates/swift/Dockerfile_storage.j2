@@ -8,8 +8,12 @@ ADD     keystonerc_admin_v3 /
 ADD     rsync /etc/xinetd.d
 ADD     rsyncd.conf /etc
 ADD     swift.conf /etc/swift
+ADD     storage.sh /usr/bin
+ADD     ring.sh /usr/bin
 ADD     start.sh /usr/bin
 
+RUN     chown root:root /usr/bin/storage.sh && chmod u+x /usr/bin/storage.sh
+RUN     chown root:root /usr/bin/ring.sh && chmod u+x /usr/bin/ring.sh
 RUN     chown root:root /usr/bin/start.sh && chmod u+x /usr/bin/start.sh
 
 ENTRYPOINT  ["/usr/bin/start.sh"]

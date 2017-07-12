@@ -1,0 +1,74 @@
+---
+- name: Openshaft It!!!
+  hosts: origin
+  remote_user: centos
+  gather_facts: true
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+#   - name: Disable Selinux
+#     selinux:
+#      policy: targeted
+#      state: permissive
+   - name: Load Openvswitch Module
+     modprobe:
+      name: openvswitch
+      state: present
+   - name: Make sure Openvswitch Module Gets Loaded
+     copy:
+      content: "openvswitch"
+      dest: /etc/modules-load.d/openvswitch.conf
+   - name: Load Kvm Module
+     modprobe:
+      name: kvm_intel
+      state: present
+      params: nested=1
+   - name: Set Sysctl Entries 
+     sysctl:
+      name: "{{ item }}"
+      value: 0
+      sysctl_set: yes
+      state: present
+      reload: yes
+     with_items:
+     - net.ipv4.conf.all.rp_filter
+     - net.ipv4.conf.default.rp_filter
+   - name: Install Packages
+     package:
+      name: "{{ item }}"
+      state: present
+     with_items:
+      - nfs-utils
+   - name: Enable Services
+     service:
+      name: "{{ item }}"
+      enabled: yes
+      state: started
+     with_items:
+      - nfs
+   - name: Create Glance Data Directory
+     file:
+      path: /glance
+      state: directory
+   - name: Create Cinder Directory
+     file:
+      path: /cinder
+      state: directory
+      owner: 165
+      group: 165
+   - name: Create Glance Nfs Share
+     lineinfile:
+      dest: /etc/exports
+      line: '/glance *(rw,insecure,no_root_squash)'
+   - name: Create Cinder Nfs Share
+     lineinfile:
+      dest: /etc/exports
+      line: '/cinder *(rw,insecure,no_root_squash)'
+     register: nfs_exports
+   - name: Enable Nfs Shares
+     command: exportfs -r
+     when: nfs_exports.changed
+   - name: Include Openshaft Role
+     include_role:
+      name: openshaft

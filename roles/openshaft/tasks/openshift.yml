@@ -11,11 +11,13 @@
   file:
     path: "/etc/docker/certs.d/{{ registry_url }}"
     state: directory
+  when: registry_certificate is defined
 
 - name: Create Registry Certificate
   copy:
     content: "{{ registry_certificate }}"
     dest: "/etc/docker/certs.d/{{ registry_url }}/ca.crt"
+  when: registry_certificate is defined
 
 - name: Download Oc Client
   command: "wget -O /root/oc.tar.gz {{ openshaft.oc_client | default('https://github.com/openshift/origin/releases/download/v1.5.1/openshift-origin-client-tools-v1.5.1-7b451fc-linux-64bit.tar.gz') }}"
@@ -28,7 +30,7 @@
    creates: /usr/bin/oc
 
 - name: Log In Openshift
-  command: "oc login --insecure-skip-tls-verify=true {{ openshift_host }}:8443 -u {{ openshift_user }} -p {{ openshift_password }}"
+  command: "oc login --insecure-skip-tls-verify=true {{ openshift_host }}:8443 -u {{ openshift_user }} -p {{ openshift_password }} -n {{ openshift_project }}"
   register: openshift_loggedin
 
 - name: Grab Openshift Token
@@ -36,15 +38,27 @@
   register: registry_token
   when: openshift_loggedin|succeeded
 
+- name: Set Docker Registry Protocol
+  set_fact:
+   protocol: "{{ 'https://' if registry_certificate is defined else 'http://' }}"
+   port: "{{ '' if registry_certificate is defined else ':5000' }}"
+
 - name: Login Registry
-  command: "docker login https://{{ registry_url }} -u {{ openshift_user }} -p {{ registry_token.stdout }}"
+#  command: "docker login https://{{ registry_url }} -u {{ openshift_user }} -p {{ registry_token.stdout }}"
+  command: "docker login {{ protocol }}{{ registry_url }}{{ port }} -u {{ openshift_user }} -p {{ registry_token.stdout }}"
   register: registry_loggedin
   when: registry_token is defined
 
 - name: Tag Image For Openshift
-  command: "docker tag openshaft/{{ component }} {{ registry_url }}/{{ openshift_project }}/{{ component}}"
+#  command: "docker tag openshaft/{{ component }} {{ registry_url }}/{{ openshift_project }}/{{ component}}"
+  command: "docker tag openshaft/{{ component }} {{ registry_url }}{{ port }}/{{ openshift_project }}/{{ component}}"
   register: image_tagged
 
 - name: Push Image To Openshift
-  command: "docker push {{ registry_url }}/{{ openshift_project }}/{{ component}}"
+  command: "docker push {{ registry_url }}{{ port }}/{{ openshift_project }}/{{ component}}"
   when: registry_loggedin|succeeded and image_tagged|succeeded
+
+- name: Create Config Map for Component
+  shell: "oc delete configmap {{ item }} ; oc create configmap {{ item }} --from-file={{ rootdir }}/{{ item }}"
+  when: configfiles is defined and registry_loggedin|succeeded and image_tagged|succeeded
+  with_items: "{{ configfiles }}"

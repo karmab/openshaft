@@ -1,0 +1,15 @@
+{% for item in ['object','account','container'] %}
+swift-ring-builder /etc/swift/{{ item }}.builder create {{ swift_partition }} {{ swift_replicas }} 1
+{% endfor %}
+
+{% for ip in swift.ips %}
+{% for device in swift.devices %}
+swift-ring-builder /etc/swift/object.builder add z1-{{ ip }}:6200/{{ device }} 100
+swift-ring-builder /etc/swift/container.builder add z1-{{ ip }}:6201/{{ device }} 100
+swift-ring-builder /etc/swift/account.builder add z1-{{ ip }}:6202/{{ device }} 100
+{% endfor %}
+{% endfor %}
+
+{% for item in ['object','account','container'] %}
+swift-ring-builder /etc/swift/{{ item }}.builder rebalance
+{% endfor %}

@@ -6,8 +6,10 @@ RUN {{ pkgrelease }} yum -y install {{ packages | join (' ') }} && yum clean all
 ADD     keystonerc_admin /
 ADD     keystonerc_admin_v3 /
 ADD     proxy-server.conf /etc/swift
+ADD     ring.sh /usr/bin
 ADD     start.sh /usr/bin
 
+RUN     chown root:root /usr/bin/ring.sh && chmod u+x /usr/bin/ring.sh
 RUN     chown root:root /usr/bin/start.sh && chmod u+x /usr/bin/start.sh
 
 ENTRYPOINT  ["/usr/bin/start.sh"]
