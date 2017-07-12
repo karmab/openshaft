@@ -43,8 +43,12 @@
   set_fact:
     configfiles:
      - cinder.conf
-#     - nfs_shares
   when: configure_cinder.changed
+
+- name: Add NFS Shares ConfigFile To Openshift Config Maps
+  set_fact:
+    configfiles: "{{ configfiles }} + ['nfs_shares']"
+  when: configfiles is defined and cinder.volume_driver == 'cinder.volume.drivers.nfs.NfsDriver'
 
 - include: openshift.yml
   when: registry_url is defined and registry_certificate is defined and openshift_project is defined

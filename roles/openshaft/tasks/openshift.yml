@@ -1,5 +1,11 @@
 ---
 
+- name: Copy Openshift Deployment Configs
+  copy:
+    src: deploymentconfigs
+    dest: "{{ openshaft.rootdir }}/deploymentconfigs"
+    recursive: true
+
 - name: Create Registry Host entry
   lineinfile: 
    dest: /etc/hosts
@@ -58,7 +64,7 @@
   command: "docker push {{ registry_url }}{{ port }}/{{ openshift_project }}/{{ component}}"
   when: registry_loggedin|succeeded and image_tagged|succeeded
 
-- name: Create Config Map for Component
+- name: Create Config Map
   shell: "oc delete configmap {{ item }} ; oc create configmap {{ item }} --from-file={{ rootdir }}/{{ item }}"
   when: configfiles is defined and registry_loggedin|succeeded and image_tagged|succeeded
   with_items: "{{ configfiles }}"
