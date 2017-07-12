@@ -1,0 +1,6 @@
+{% for item in swift.devices  %}
+mkdir -p /srv/node/{{ item }}
+chown swift.swift /srv/node/{{ item }}
+mkfs.{{ swift_fstype }} /dev/{{ item }} || true
+mount -t {{ swift_fstype }} /dev/{{ item }} /srv/node/{{ item }}
+{% endfor %}

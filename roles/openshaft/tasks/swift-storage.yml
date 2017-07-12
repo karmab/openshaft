@@ -26,6 +26,18 @@
     src: swift/swift.conf
     dest: "{{ openshaft.rootdir }}/{{ component }}/swift.conf"
 
+- name: Create Swift Storage Script
+  template:
+   src: "swift/storage.sh.j2"
+   dest: "{{ rootdir }}/storage.sh"
+  register: storage_file
+
+- name: Create Swift Ring Script
+  template:
+   src: "swift/ring.sh.j2"
+   dest: "{{ rootdir }}/ring.sh"
+  register: ring_file
+
 - name: Create Swift Storage Startfile
   template:
    src: "swift/start_storage.sh.j2"
@@ -40,7 +52,14 @@
  
 - name: Build Swift Storage Image
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
-  when: start_file.changed or dockerfile.changed
+  when: ring_file.changed or storage_file.changed or start_file.changed or dockerfile.changed
+
+- name: Set Swift Storage ConfigFiles For Openshift Config Maps
+  set_fact:
+    configfiles:
+     - storage.sh
+     - ring.sh
+  when: ring_file.changed or storage_file.changed
 
 - include: openshift.yml
   when: registry_url is defined and registry_certificate is defined and openshift_project is defined

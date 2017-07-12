@@ -1,6 +1,6 @@
 ---
 - name: Openshaft It!!!
-  hosts: openshaft
+  hosts: origin
   remote_user: centos
   gather_facts: true
   become: yes

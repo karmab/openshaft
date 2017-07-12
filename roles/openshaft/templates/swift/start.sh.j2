@@ -6,22 +6,6 @@ openstack service create  --name swift --description "Swift Object Service" obje
 openstack endpoint create --region {{ common.region }} --publicurl '{{ swift_public_url }}' --internalurl '{{ swift_internal_url }}' --adminurl '{{ swift_admin_url }}' object-store
 openstack user create --password {{ swift.password }} swift
 openstack role add --project services --user swift admin
-
-{% for item in ['object','account','container'] %} 
-swift-ring-builder /etc/swift/{{ item }}.builder create {{ swift_partition }} {{ swift_replicas }} 1
-{% endfor %}
-
-{% for ip in swift.ips %}
-{% for device in swift.devices %}
-swift-ring-builder /etc/swift/object.builder add z1-{{ ip }}:6200/{{ device }} 100
-swift-ring-builder /etc/swift/container.builder add z1-{{ ip }}:6201/{{ device }} 100
-swift-ring-builder /etc/swift/account.builder add z1-{{ ip }}:6202/{{ device }} 100
-{% endfor %}
-{% endfor %}
-
-{% for item in ['object','account','container'] %} 
-swift-ring-builder /etc/swift/{{ item }}.builder rebalance
-{% endfor %}
-
+/usr/bin/ring.sh
 chown -R root.swift /etc/swift
 swift-proxy-server /etc/swift/proxy-server.conf  > /var/log/swift/proxy-server.log 2>&1

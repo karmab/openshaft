@@ -43,5 +43,11 @@
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
   when: configure_keystone.changed or start_file.changed or dockerfile.changed
 
+- name: Set Keystone ConfigFiles For Openshift Config Maps
+  set_fact:
+    configfiles:
+     - keystone.conf 
+  when: configure_keystone.changed
+
 - include: openshift.yml
   when: registry_url is defined and registry_certificate is defined and openshift_project is defined

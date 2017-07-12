@@ -39,5 +39,11 @@
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
   when: configure_neutron.changed or start_file.changed or dockerfile.changed
 
+- name: Set Neutron ConfigFiles For Openshift Config Maps
+  set_fact:
+    configfiles:
+     - neutron.conf
+  when: configure_neutron.changed
+
 - include: openshift.yml
   when: registry_url is defined and registry_certificate is defined and openshift_project is defined
