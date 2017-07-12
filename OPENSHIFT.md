@@ -137,7 +137,7 @@ oc expose service swift -l name=swift
 
 The corresponding public\_urls will automatically be configured in keystone if properly defining openshift_domain ( which typically will be based on your current project and default domain for apps)
 
-So for instance, if you deploy in project *openshadt* and your default domain for app is *apps.karmalabs.local*, you get the following urls:
+So for instance, if you deploy in project *openshaft* and your default domain for app is *apps.karmalabs.local*, you get the following urls:
 
 - keystone-openshaft.apps.karmalabs.local
 - glance-openshaft.apps.karmalabs.local
