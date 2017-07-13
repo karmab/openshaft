@@ -159,11 +159,10 @@ swift:
  username: swift
  password: swift
  replicas: 1
- storage_nodes:
-  all:
-   devices:
-    - vdb
-   ip: 172.17.0.1
+ devices:
+  - disk1
+ ips:
+  - 192.168.122.135
 
 horizon:
  ssl: false

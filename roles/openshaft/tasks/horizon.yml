@@ -33,5 +33,10 @@
   command: "docker build --rm -t openshaft/{{ component }} {{ rootdir }}" 
   when: configure_horizon.changed or start_file.changed or dockerfile.changed
 
+- name: Set Horizon ConfigFiles For Openshift Config Maps
+  set_fact:
+    configfiles:
+     - local_settings
+
 - include: openshift.yml
-  when: registry_url is defined and registry_certificate is defined and openshift_project is defined
+  when: registry_url is defined and registry_certificate is defined and openshift_project is defined  and configure_horizon.changed

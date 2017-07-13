@@ -63,7 +63,6 @@
   set_fact:
     configfiles:
      - nova.conf
-  when: configure_nova_compute.changed
 
 - include: openshift.yml
-  when: registry_url is defined and registry_certificate is defined and openshift_project is defined
+  when: registry_url is defined and registry_certificate is defined and openshift_project is defined and configure_nova_compute.changed
