@@ -1,0 +1,84 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: cinder
+    name: cinder
+  spec:
+    replicas: 1
+    selector:
+      app: cinder
+      deploymentconfig: cinder
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: cinder
+          deploymentconfig: cinder
+      spec:
+        containers:
+        - image: cinder:latest
+          name: cinder
+          ports:
+          - containerPort: 8776
+            protocol: TCP
+          resources: {}
+          volumemounts:
+           - name: cinder
+             mountPath: /etc/cinder
+        volumes:
+         - name: cinder
+           configMap:
+            name: cinder
+        serviceAccount: sa-anyuid
+        serviceAccountName: sa-anyuid
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - cinder
+        from:
+          kind: ImageStreamTag
+          name: cinder:latest
+          namespace: openshaft
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: cinder
+    name: cinder
+  spec:
+    ports:
+    - name: 8776-tcp
+      port: 8776
+      protocol: TCP
+      targetPort: 8776
+    selector:
+      app: cinder
+      deploymentconfig: cinder
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}
