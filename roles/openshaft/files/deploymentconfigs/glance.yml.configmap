@@ -35,10 +35,10 @@ items:
             protocol: TCP
           resources: {}
           volumeMounts:
-          - mountPath: /var/lib/glance
-            name: glancedata
-          - mountPath: /etc/glance
-            name: glance
+          - name: glancedata
+            mountPath: /var/lib/glance
+          - name: glance
+            mountPath: /etc/glance
         volumes:
         - name: glancedata
           persistentVolumeClaim:

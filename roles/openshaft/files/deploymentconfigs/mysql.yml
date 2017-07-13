@@ -59,12 +59,12 @@ items:
             protocol: TCP
           resources: {}
           volumeMounts:
-          - mountPath: "/var/lib/mysql"
-            name: "mysql"
+          - name: mysql
+            mountPath: /var/lib/mysql
         volumes:
-        - name: "mysql"
+        - name: mysql
           persistentVolumeClaim:
-            claimName: "pvcmysql"
+            claimName: pvcmysql
         serviceAccount: sa-anyuid
         serviceAccountName: sa-anyuid
     test: false
