@@ -7,13 +7,13 @@ items:
       openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
-      app: glance
-    name: glance
+      app: horizon
+    name: horizon
   spec:
     replicas: 1
     selector:
-      app: glance
-      deploymentconfig: glance
+      app: horizon
+      deploymentconfig: horizon
     strategy:
       resources: {}
     template:
@@ -22,25 +22,25 @@ items:
           openshift.io/generated-by: OpenShiftNewApp
         creationTimestamp: null
         labels:
-          app: glance
-          deploymentconfig: glance
+          app: horizon
+          deploymentconfig: horizon
       spec:
         containers:
-        - image: glance:latest
-          name: glance
+        - image: horizon:latest
+          name: horizon
           ports:
-          - containerPort: 9191
+          - containerPort: 443
             protocol: TCP
-          - containerPort: 9292
+          - containerPort: 80
             protocol: TCP
           resources: {}
-          volumeMounts:
-          - mountPath: /var/lib/glance
-            name: glancedata
+          volumemounts:
+           - name: horizon
+             mountPath: /etc/openstack-dashboard
         volumes:
-        - name: glancedata
-          persistentVolumeClaim:
-            claimName: "pvcglance"
+         - name: horizon
+           configMap:
+            name: horizon
         serviceAccount: sa-anyuid
         serviceAccountName: sa-anyuid
     test: false
@@ -49,10 +49,10 @@ items:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - glance
+        - horizon
         from:
           kind: ImageStreamTag
-          name: glance:latest
+          name: horizon:latest
           namespace: openshaft
       type: ImageChange
   status:
@@ -69,21 +69,21 @@ items:
       openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
-      app: glance
-    name: glance
+      app: horizon
+    name: horizon
   spec:
     ports:
-    - name: 9191-tcp
-      port: 9191
+    - name: 80-tcp
+      port: 80
       protocol: TCP
-      targetPort: 9191
-    - name: 9292-tcp
-      port: 9292
+      targetPort: 80
+    - name: 443-tcp
+      port: 443
       protocol: TCP
-      targetPort: 9292
+      targetPort: 443
     selector:
-      app: glance
-      deploymentconfig: glance
+      app: horizon
+      deploymentconfig: horizon
   status:
     loadBalancer: {}
 kind: List

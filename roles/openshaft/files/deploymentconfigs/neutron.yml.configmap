@@ -7,13 +7,13 @@ items:
       openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
-      app: glance
-    name: glance
+      app: neutron
+    name: neutron
   spec:
     replicas: 1
     selector:
-      app: glance
-      deploymentconfig: glance
+      app: neutron
+      deploymentconfig: neutron
     strategy:
       resources: {}
     template:
@@ -22,25 +22,23 @@ items:
           openshift.io/generated-by: OpenShiftNewApp
         creationTimestamp: null
         labels:
-          app: glance
-          deploymentconfig: glance
+          app: neutron
+          deploymentconfig: neutron
       spec:
         containers:
-        - image: glance:latest
-          name: glance
+        - image: neutron:latest
+          name: neutron
           ports:
-          - containerPort: 9191
-            protocol: TCP
-          - containerPort: 9292
+          - containerPort: 9696
             protocol: TCP
           resources: {}
-          volumeMounts:
-          - mountPath: /var/lib/glance
-            name: glancedata
+          volumemounts:
+           - name: neutron
+             mountPath: /etc/neutron
         volumes:
-        - name: glancedata
-          persistentVolumeClaim:
-            claimName: "pvcglance"
+         - name: neutron
+           configMap:
+            name: neutron
         serviceAccount: sa-anyuid
         serviceAccountName: sa-anyuid
     test: false
@@ -49,10 +47,10 @@ items:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - glance
+        - neutron
         from:
           kind: ImageStreamTag
-          name: glance:latest
+          name: neutron:latest
           namespace: openshaft
       type: ImageChange
   status:
@@ -69,21 +67,17 @@ items:
       openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
-      app: glance
-    name: glance
+      app: neutron
+    name: neutron
   spec:
     ports:
-    - name: 9191-tcp
-      port: 9191
+    - name: 9696-tcp
+      port: 9696
       protocol: TCP
-      targetPort: 9191
-    - name: 9292-tcp
-      port: 9292
-      protocol: TCP
-      targetPort: 9292
+      targetPort: 9696
     selector:
-      app: glance
-      deploymentconfig: glance
+      app: neutron
+      deploymentconfig: neutron
   status:
     loadBalancer: {}
 kind: List

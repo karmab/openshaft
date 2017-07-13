@@ -7,13 +7,13 @@ items:
       openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
-      app: glance
-    name: glance
+      app: heat
+    name: heat
   spec:
     replicas: 1
     selector:
-      app: glance
-      deploymentconfig: glance
+      app: heat
+      deploymentconfig: heat
     strategy:
       resources: {}
     template:
@@ -22,25 +22,27 @@ items:
           openshift.io/generated-by: OpenShiftNewApp
         creationTimestamp: null
         labels:
-          app: glance
-          deploymentconfig: glance
+          app: heat
+          deploymentconfig: heat
       spec:
         containers:
-        - image: glance:latest
-          name: glance
+        - image: heat:latest
+          name: heat
           ports:
-          - containerPort: 9191
+          - containerPort: 8004
             protocol: TCP
-          - containerPort: 9292
+          - containerPort: 8000
+            protocol: TCP
+          - containerPort: 8003
             protocol: TCP
           resources: {}
-          volumeMounts:
-          - mountPath: /var/lib/glance
-            name: glancedata
+          volumemounts:
+           - name: heat
+             mountPath: /etc/heat
         volumes:
-        - name: glancedata
-          persistentVolumeClaim:
-            claimName: "pvcglance"
+         - name: heat
+           configMap:
+            name: heat
         serviceAccount: sa-anyuid
         serviceAccountName: sa-anyuid
     test: false
@@ -49,10 +51,10 @@ items:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - glance
+        - heat
         from:
           kind: ImageStreamTag
-          name: glance:latest
+          name: heat:latest
           namespace: openshaft
       type: ImageChange
   status:
@@ -69,21 +71,25 @@ items:
       openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
-      app: glance
-    name: glance
+      app: heat
+    name: heat
   spec:
     ports:
-    - name: 9191-tcp
-      port: 9191
+    - name: 8000-tcp
+      port: 8000
       protocol: TCP
-      targetPort: 9191
-    - name: 9292-tcp
-      port: 9292
+      targetPort: 8000
+    - name: 8003-tcp
+      port: 8003
       protocol: TCP
-      targetPort: 9292
+      targetPort: 8003
+    - name: 8004-tcp
+      port: 8004
+      protocol: TCP
+      targetPort: 8004
     selector:
-      app: glance
-      deploymentconfig: glance
+      app: heat
+      deploymentconfig: heat
   status:
     loadBalancer: {}
 kind: List

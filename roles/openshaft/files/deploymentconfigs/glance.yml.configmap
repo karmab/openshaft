@@ -37,10 +37,15 @@ items:
           volumeMounts:
           - mountPath: /var/lib/glance
             name: glancedata
+          - mountPath: /etc/glance
+            name: glance
         volumes:
         - name: glancedata
           persistentVolumeClaim:
-            claimName: "pvcglance"
+            claimName: pvcglance
+        - name: glance
+          configMap:
+           name: glance
         serviceAccount: sa-anyuid
         serviceAccountName: sa-anyuid
     test: false

@@ -7,13 +7,13 @@ items:
       openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
-      app: glance
-    name: glance
+      app: nova
+    name: nova
   spec:
     replicas: 1
     selector:
-      app: glance
-      deploymentconfig: glance
+      app: nova
+      deploymentconfig: nova
     strategy:
       resources: {}
     template:
@@ -22,25 +22,29 @@ items:
           openshift.io/generated-by: OpenShiftNewApp
         creationTimestamp: null
         labels:
-          app: glance
-          deploymentconfig: glance
+          app: nova
+          deploymentconfig: nova
       spec:
         containers:
-        - image: glance:latest
-          name: glance
+        - image: nova:latest
+          name: nova
           ports:
-          - containerPort: 9191
+          - containerPort: 8774
             protocol: TCP
-          - containerPort: 9292
+          - containerPort: 8775
+            protocol: TCP
+          - containerPort: 6080
+            protocol: TCP
+          - containerPort: 8773
             protocol: TCP
           resources: {}
-          volumeMounts:
-          - mountPath: /var/lib/glance
-            name: glancedata
+          volumemounts:
+           - name: nova
+             mountPath: /etc/nova
         volumes:
-        - name: glancedata
-          persistentVolumeClaim:
-            claimName: "pvcglance"
+         - name: nova
+           configMap:
+            name: nova
         serviceAccount: sa-anyuid
         serviceAccountName: sa-anyuid
     test: false
@@ -49,10 +53,10 @@ items:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - glance
+        - nova
         from:
           kind: ImageStreamTag
-          name: glance:latest
+          name: nova:latest
           namespace: openshaft
       type: ImageChange
   status:
@@ -69,21 +73,29 @@ items:
       openshift.io/generated-by: OpenShiftNewApp
     creationTimestamp: null
     labels:
-      app: glance
-    name: glance
+      app: nova
+    name: nova
   spec:
     ports:
-    - name: 9191-tcp
-      port: 9191
+    - name: 6080-tcp
+      port: 6080
       protocol: TCP
-      targetPort: 9191
-    - name: 9292-tcp
-      port: 9292
+      targetPort: 6080
+    - name: 8773-tcp
+      port: 8773
       protocol: TCP
-      targetPort: 9292
+      targetPort: 8773
+    - name: 8774-tcp
+      port: 8774
+      protocol: TCP
+      targetPort: 8774
+    - name: 8775-tcp
+      port: 8775
+      protocol: TCP
+      targetPort: 8775
     selector:
-      app: glance
-      deploymentconfig: glance
+      app: nova
+      deploymentconfig: nova
   status:
     loadBalancer: {}
 kind: List
