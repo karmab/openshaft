@@ -50,6 +50,8 @@
     magnum_hosts: "{{ [common.magnum_hosts, common.controller_hosts] | first_found | default(['127.0.0.1']) }}"
     barbican_host: "{{ [common.barbican_host, common.controller_host] | first_found | default('127.0.0.1') }}"
     barbican_hosts: "{{ [common.barbican_hosts, common.controller_hosts] | first_found | default(['127.0.0.1']) }}"
+    ironic_host: "{{ [common.ironic_host, common.ironic_host] | first_found | default('127.0.0.1') }}"
+    ironic_hosts: "{{ [common.ironic_hosts, common.ironic_hosts] | first_found | default(['127.0.0.1']) }}"
 
 - name: Force Keystone Version to v2.0
   set_fact:
@@ -126,6 +128,9 @@
     barbican_public_url: "{{ barbican.public_url | default('http://' ~ barbican_host ~ ':9311/v1') }}"
     barbican_internal_url: "{{ barbican.internal_url | default('http://' ~ barbican_host ~ ':9311/v1') }}"
     barbican_admin_url: "{{ barbican.admin_url | default('http://' ~ barbican_host ~ ':9311/v1') }}"
+    ironic_public_url: "{{ ironic.public_url | default('http://' ~ ironic_host ~ ':6385') }}"
+    ironic_internal_url: "{{ ironic.internal_url | default('http://' ~ ironic_host ~ ':6385') }}"
+    ironic_admin_url: "{{ ironic.admin_url | default('http://' ~ ironic_host ~ ':6385') }}"
 
 - name: Set Mysql Prefix for Kilo
   set_fact:

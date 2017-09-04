@@ -36,6 +36,7 @@ mysql:
   - designate
   - designate_pool_manager
   - magnum
+  - ironic
 
 keystone:
  host: keystone
@@ -223,3 +224,11 @@ barbican:
  dbname: barbican
  username: barbican
  password: barbican
+
+ironic:
+ host: ironic
+ dbuser: ironic
+ dbpassword: ironic
+ dbname: ironic
+ username: ironic
+ password: ironic

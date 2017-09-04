@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/karmab/openshaft.svg?branch=master)](https://travis-ci.org/karmab/openshaft)
 
-Ansible role to deploy custom openstack containers for each component and run on single *docker* or  *openshift/kubernetes*
+Ansible role to deploy custom openstack containers for each component and run on single *docker* or  *openshift*
 
 - keystone
 - glance

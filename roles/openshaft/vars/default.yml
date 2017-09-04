@@ -139,3 +139,7 @@ dbupgrader_packages:
  - 'openstack-glance'
  - 'openstack-neutron-openvswitch'
  - 'openstack-neutron-ml2'
+ironic_packages:
+ - 'openstack-ironic-api'
+ - 'openstack-ironic-conductor'
+ - 'python-ironicclient'
